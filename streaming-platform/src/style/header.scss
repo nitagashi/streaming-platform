@@ -1,0 +1,70 @@
+@import './themes.scss';
+
+button {
+    all: unset;
+}
+
+.header {
+    background-color: $RubyPlex-DarkBlue;
+    height: 4em;
+
+    &-list {
+        margin-left: 1em;
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        height: 100%;
+        &__logo{
+            height: 2.5em;
+        }
+        &__btn {
+            font-size: 17px;
+            padding: 0.5em 1em;
+            color: $RubyPlex-White;
+            position: relative;
+            transition: .5s ease;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 2px;
+                width: 0;
+                background-color: $RubyPlex-Red;
+                transition: .5s ease;
+            }
+
+            &:hover {
+                color: $RubyPlex-White;
+
+                &::before {
+                    width: 100%;
+                }
+            }
+            &:active{
+                &::before{
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    opacity: 0.3;
+                    background-color: $RubyPlex-LightRed;
+                    transition: .5s ease;
+                }
+            }
+            &-active {
+                &::before{
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    height: 2px;
+                    width: 100%;
+                    background-color: $RubyPlex-MediumRed;
+                    transition: .5s ease;
+                }
+                color: $RubyPlex-LightRed;
+            }
+        }
+    }
+}
