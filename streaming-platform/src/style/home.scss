@@ -8,7 +8,7 @@
             content: '';
             background-image: url(../images/HomeBanner.png);
             width: 100%;
-            height: 80vh;
+            height: 70vh;
             position: absolute;
             z-index: -1000;
             filter: brightness(0.25);
@@ -48,14 +48,17 @@
                 letter-spacing: 2px;
                 overflow: hidden;
                 transition: all 0.2s ease-in;
+
                 &:hover {
                     background: $RubyPlex-MediumRed;
                     box-shadow: 0 0 30px 5px $RubyPlex-MediumRed;
                     transition: all 0.2s ease-out;
                 }
+
                 &:hover::before {
                     animation: swipe 0.5s 0s linear;
                 }
+
                 &::before {
                     content: '';
                     display: block;
@@ -68,21 +71,7 @@
                     background: #fff;
                     box-shadow: 0 0 50px 30px #fff;
                 }
-                @keyframes swipe {
-                    from {
-                        opacity: 0;
-                        left: 0%;
-                    }
-    
-                    50% {
-                        opacity: 1;
-                    }
-    
-                    to {
-                        opacity: 0;
-                        left: 100%;
-                    }
-                }
+
                 &:active {
                     box-shadow: 0 0 0 0 transparent;
                     transition: box-shadow 0.2s ease-in;
@@ -93,7 +82,114 @@
 
     &-Latest {
         position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 3em 0;
         height: 50vh;
-        background-color: aliceblue;
+        background: $RubyPlex-DarkBlue;
+
+        &__Carousel {
+            width: 100%;
+        }
+    }
+}
+
+
+.FlipCard {
+    border-radius: 1rem;
+    width: 190px;
+    height: 320px;
+    perspective: 1000px;
+
+    &-Inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-color: $RubyPlex-White;
+        border-radius: 1rem;
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+    }
+
+    &:hover &-Inner {
+        transform: rotateY(180deg);
+    }
+
+    &-Front {
+        &__Img {
+            height: 300px;
+            border-radius: 1rem;
+        }
+
+        &__Title {
+            margin: 0;
+            font-size: 15px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+    }
+
+    &-Back {
+        position: relative;
+        &__Title {
+            color: $RubyPlex-White;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        &__Img {
+            position: absolute;
+            border-radius: 1rem;
+            width: 101%;
+            height: 101%;
+            z-index: -1000;
+            filter: brightness(0.2);
+        }
+        &__Description {
+            color: $RubyPlex-White;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 7;
+            -webkit-box-orient: vertical;
+        }
+
+        transform: rotateY(180deg);
+    }
+
+    &-Front,
+    &-Back {
+        box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 1rem;
+    }
+}
+
+@keyframes swipe {
+    from {
+        opacity: 0;
+        left: 0%;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        left: 100%;
     }
 }
