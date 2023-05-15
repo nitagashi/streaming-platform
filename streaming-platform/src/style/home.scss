@@ -1,0 +1,99 @@
+@import './themes.scss';
+
+.Home {
+    &-Banner {
+        height: 70vh;
+
+        &::before {
+            content: '';
+            background-image: url(../images/HomeBanner.png);
+            width: 100%;
+            height: 80vh;
+            position: absolute;
+            z-index: -1000;
+            filter: brightness(0.25);
+        }
+
+        & * {
+            left: 40px;
+        }
+
+        color: $RubyPlex-White;
+
+        &__Welcome {
+            position: absolute;
+            font-size: 15pt;
+            top: 6em;
+        }
+
+        &__Description {
+            position: absolute;
+            font-size: 23pt;
+            top: 5em;
+            max-width: 50vw;
+            font-weight: 500;
+        }
+
+        &__Buttons {
+            position: relative;
+            left: 0px;
+            top: 21em;
+
+            & button {
+                position: relative;
+                padding: 10px 20px;
+                border-radius: 7px;
+                border: 1px solid $RubyPlex-MediumRed;
+                background: $RubyPlex-MediumRed-Transparent;
+                letter-spacing: 2px;
+                overflow: hidden;
+                transition: all 0.2s ease-in;
+                &:hover {
+                    background: $RubyPlex-MediumRed;
+                    box-shadow: 0 0 30px 5px $RubyPlex-MediumRed;
+                    transition: all 0.2s ease-out;
+                }
+                &:hover::before {
+                    animation: swipe 0.5s 0s linear;
+                }
+                &::before {
+                    content: '';
+                    display: block;
+                    width: 0px;
+                    height: 86%;
+                    position: absolute;
+                    top: 7%;
+                    left: 0%;
+                    opacity: 0;
+                    background: #fff;
+                    box-shadow: 0 0 50px 30px #fff;
+                }
+                @keyframes swipe {
+                    from {
+                        opacity: 0;
+                        left: 0%;
+                    }
+    
+                    50% {
+                        opacity: 1;
+                    }
+    
+                    to {
+                        opacity: 0;
+                        left: 100%;
+                    }
+                }
+                &:active {
+                    box-shadow: 0 0 0 0 transparent;
+                    transition: box-shadow 0.2s ease-in;
+                }
+            }
+        }
+    }
+
+    &-Latest {
+        position: relative;
+        height: 50vh;
+        background-color: aliceblue;
+    }
+}
