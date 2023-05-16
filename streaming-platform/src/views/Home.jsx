@@ -69,12 +69,14 @@ function Home() {
                     Start Binge-Watching Today!
                 </p>
                 <div className='Home-Banner__Buttons'>
-                    <button>
-                        Watch Now.
-                    </button>
+                    <a href="#movies">
+                        <button>
+                            Watch Now.
+                        </button>
+                    </a>
                 </div>
             </div>
-            <div className='Home-LatestMovie'>
+            <div id="movies" className='Home-LatestMovie'>
                 <p className='Home-LatestMovie__Title'>Trending Movies</p>
                 <Carousel
                     swipeable={true}
