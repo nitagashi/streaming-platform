@@ -1,0 +1,60 @@
+@import './themes.scss';
+
+.Show {
+    display: flex;
+    gap: 3em;
+    padding: 3em;
+    background-color: $RubyPlex-VeryDarkBlue;
+
+    &-ImageContainer {
+        display: flex;
+        align-items: flex-start;
+        background: $RubyPlex-DarkBlue;
+        padding: 0.75em;
+        border-radius: 0.25rem;
+
+        &__Img {
+            width: 240px;
+        }
+    }
+
+    &-Description {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+
+        &-Section {
+            background: $RubyPlex-DarkBlue;
+            color: $RubyPlex-White;
+            padding: 0.75em;
+            border-radius: 0.25rem;
+
+            &__Title{
+                margin-bottom: 1em;
+            }
+
+            &--BtnContainer {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1em;
+            }
+
+            &__Btn {
+                background: $RubyPlex-VeryDarkBlue;
+                color: white;
+                padding: 8px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: $RubyPlex-LightBlue;
+                }
+
+                &:active {
+                    background-color: #39394e;
+                }
+            }
+        }
+    }
+}

@@ -5,6 +5,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import SeriesService from 'services/SeriesServices';
 import SerieCard from 'components/Series/SerieCard';
+import { Link } from 'react-router-dom';
 
 function Home() {
     const [movies, setMovies] = useState([]);
@@ -96,7 +97,11 @@ function Home() {
                     {
                         movies.map((movie) => {
                             console.log(movie);
-                            return <FlipCard id={movie.id} key={movie.id} />
+                            return (
+                                <Link to={"/Show/" + movie.id}>
+                                    <FlipCard id={movie.id} key={movie.id} />
+                                </Link>
+                            )
                         })
                     }
                 </Carousel>
@@ -120,7 +125,11 @@ function Home() {
                 >
                     {
                         series.map((serie) => {
-                            return <SerieCard id={serie.id} key={serie.id} />
+                            return (
+                                <Link to={"/SerieShow/" + serie.id}>
+                                    <SerieCard id={serie.id} key={serie.id} />
+                                </Link>
+                            )
                         })
                     }
                 </Carousel>
@@ -144,7 +153,11 @@ function Home() {
                 >
                     {
                         topRatesSeries.map((topRatesSerie) => {
-                            return <SerieCard id={topRatesSerie.id} key={topRatesSerie.id} />
+                            return (
+                                <Link to={"/SerieShow/" + topRatesSerie.id}>
+                                    <SerieCard id={topRatesSerie.id} key={topRatesSerie.id} />
+                                </Link>
+                            )
                         })
                     }
                 </Carousel>
