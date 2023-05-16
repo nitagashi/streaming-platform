@@ -10,6 +10,9 @@ class movieService{
     async getMovieById(id){
         return axios.get(`${ApiUrl}/movie/${id}?api_key=${ApiKey}`)
     }
+    async getTopRated(){
+        return axios.get(`${ApiUrl}/movie/top_rated?api_key=${ApiKey}`)
+    }
 }
 const MovieService = new movieService();
 export default MovieService;

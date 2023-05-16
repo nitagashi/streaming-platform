@@ -7,7 +7,6 @@ function FlipCard(props) {
 
     useEffect(() => {
         MovieService.getMovieById(id).then((res) => {
-            console.log(res);
             setMovie(res.data)
         })
     }, [])
@@ -15,8 +14,10 @@ function FlipCard(props) {
         <div className="FlipCard">
             <div className="FlipCard-Inner">
                 <div className="FlipCard-Front">
-                    <img className="FlipCard-Front__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${movie.poster_path}`} />
-                    <p className="FlipCard-Front__Title">{movie.original_title}</p>
+                    <div className="FlipCard-Front-Content">
+                        <img className="FlipCard-Front-Content__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${movie.poster_path}`} />
+                        <p className="FlipCard-Front-Content__Title">{movie.original_title}</p>
+                    </div>
                 </div>
                 <div className="FlipCard-Back">
                     <img className="FlipCard-Back__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${movie.poster_path}`} />

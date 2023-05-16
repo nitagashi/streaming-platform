@@ -1,0 +1,26 @@
+@import './themes.scss';
+
+.SectionFooter {
+    background-color: $RubyPlex-Footer;
+    padding-top: 2em;
+    color: $RubyPlex-LightGrey;
+}
+
+.Footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &-Content {
+        flex: 1;
+        margin-right: 30px;
+    }
+
+    &-CopyRight {
+        background-color: $RubyPlex-DarkGrey;
+        padding: 10px 0;
+        text-align: center;
+    }
+}

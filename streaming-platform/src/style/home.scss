@@ -68,8 +68,8 @@
                     top: 7%;
                     left: 0%;
                     opacity: 0;
-                    background: #fff;
-                    box-shadow: 0 0 50px 30px #fff;
+                    background: $RubyPlex-White;
+                    box-shadow: 0 0 50px 30px $RubyPlex-White;
                 }
 
                 &:active {
@@ -80,16 +80,34 @@
         }
     }
 
-    &-Latest {
+    & .SeriesCardCarousel{
+        height: 300px;
+    }
+
+    &-LatestMovie {
         position: relative;
         display: flex;
-        flex-wrap: wrap;
-        padding: 3em 0;
-        height: 50vh;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 2em;
+        height: 500px;
         background: $RubyPlex-DarkBlue;
+
+        &__Title {
+            margin: 0;
+            font-size: 20pt;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: $RubyPlex-White;
+            padding: 1em;
+        }
 
         &__Carousel {
             width: 100%;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            padding-bottom: 2em;
         }
     }
 }
@@ -100,7 +118,7 @@
     width: 190px;
     height: 320px;
     perspective: 1000px;
-
+    cursor: pointer;
     &-Inner {
         position: relative;
         width: 100%;
@@ -117,24 +135,37 @@
     }
 
     &-Front {
-        &__Img {
-            height: 300px;
-            border-radius: 1rem;
-        }
+        &-Content {
+            position: relative;
+            height: 100%;
 
-        &__Title {
-            margin: 0;
-            font-size: 15px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-            text-align: center;
-            text-transform: uppercase;
+            &__Img {
+                width: 100%;
+                height: 100%;
+                border-radius: 1rem;
+            }
+
+            &__Title {
+                position: absolute;
+                width: 100%;
+                height: 3em;
+                bottom: 0;
+                margin: 0;
+                font-size: 15px;
+                font-weight: bold;
+                color: $RubyPlex-White;
+                text-align: center;
+                text-transform: uppercase;
+                background-color: $RubyPlex-DarkRed-Transparent;
+                border-bottom-left-radius: 1em;
+                border-bottom-right-radius: 1em;
+            }
         }
     }
 
     &-Back {
         position: relative;
+
         &__Title {
             color: $RubyPlex-White;
             font-size: 20px;
@@ -143,6 +174,7 @@
             text-align: center;
             text-transform: uppercase;
         }
+
         &__Img {
             position: absolute;
             border-radius: 1rem;
@@ -151,6 +183,7 @@
             z-index: -1000;
             filter: brightness(0.2);
         }
+
         &__Description {
             color: $RubyPlex-White;
             text-overflow: ellipsis;
@@ -191,5 +224,37 @@
     to {
         opacity: 0;
         left: 100%;
+    }
+}
+
+.SerieCard {
+    position: relative;
+    width: 275px;
+    height: 100%;
+    font-size: 25px;
+    font-weight: bold;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.55);
+    cursor: pointer;
+    transition: all .3s;
+
+    &__Img {
+        width: 275px;
+        height: 100%;
+    }
+
+    &:hover {
+        transform: scale(0.9);
+    }
+
+    &__Title {
+        position: absolute;
+        bottom: 0;
+        color: $RubyPlex-White;
+        font-size: 14pt;
+        padding: 0.5em;
+
+        &:hover {
+            visibility: visible;
+        }
     }
 }
