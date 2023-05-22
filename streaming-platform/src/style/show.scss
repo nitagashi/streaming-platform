@@ -12,6 +12,7 @@
         background: $RubyPlex-DarkBlue;
         padding: 0.75em;
         border-radius: 0.25rem;
+        height:100%;
 
         &__Img {
             width: 240px;
@@ -29,7 +30,7 @@
             padding: 0.75em;
             border-radius: 0.25rem;
 
-            &__Title{
+            &__Title {
                 margin-bottom: 1em;
             }
 
@@ -46,6 +47,12 @@
                 border-radius: 4px;
                 cursor: pointer;
                 transition: background-color 0.3s ease;
+
+                &-Active {
+                    background-color: #39394e;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                }
 
                 &:hover {
                     background-color: $RubyPlex-LightBlue;

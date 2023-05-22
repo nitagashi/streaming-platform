@@ -1,0 +1,56 @@
+@import './themes.scss';
+
+.SerieVideo {
+    display: flex;
+    justify-content: center;
+    padding: 4em 0;
+    background-color: $RubyPlex-VeryDarkBlue;
+
+    &-Episodes {
+        display: flex;
+        flex-direction: column;
+        width: 20%;
+        background-color: $RubyPlex-DarkBlue;
+        color: $RubyPlex-White;
+        overflow: auto;
+        max-height: 600px;
+
+        &__Title {
+            padding: 1em;
+            font-size: 14pt;
+            background-color: $RubyPlex-DarkRed;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        &__Btn {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 1em;
+            height: 50px;
+            &:hover{
+                background-color: $RubyPlex-LightBlue;
+            }
+            &.active{
+                background-color: $RubyPlex-LightBlue;
+            }
+            &-EpNumber {
+                margin: 0;
+                font-weight: bold;
+                font-size: 12pt;
+            }
+            &-EpName{
+                font-size: 11pt;
+            }
+        }
+    }
+
+    &-Video {
+        width: 70%;
+        & video{
+            width: 90%;
+            height: 500px;
+        }
+    }
+}

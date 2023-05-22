@@ -14,6 +14,9 @@ class seriesService{
     async getSerieEpisodes(id, season){
         return axios.get(`${ApiUrl}/tv/${id}/season/${season}?api_key=${ApiKey}`)
     }
+    async getSerieEpisodesVideo(idSerie, seasonNr, epNumber){
+        return axios.get(`${ApiUrl}/tv/${idSerie}/season/${seasonNr}/episode/${epNumber}/videos?api_key=${ApiKey}`)
+    }
     async getTopRated(){
         return axios.get(`${ApiUrl}/tv/top_rated?api_key=${ApiKey}`)
     }

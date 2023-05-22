@@ -1,13 +1,13 @@
 import Footer from 'components/Footer';
 import Header from 'components/Header';
-import Router from 'router/Router';
+import AppRoutes from 'router/AppRoutes';
 import 'style/style.scss'
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <Router />
+        <AppRoutes />
       <Footer />
     </div>
   );

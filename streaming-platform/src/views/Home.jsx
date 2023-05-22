@@ -98,7 +98,7 @@ function Home() {
                         movies.map((movie) => {
                             console.log(movie);
                             return (
-                                <Link to={"/Show/" + movie.id}>
+                                <Link to={"/MovieShow/" + movie.id}>
                                     <FlipCard id={movie.id} key={movie.id} />
                                 </Link>
                             )
