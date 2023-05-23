@@ -9,7 +9,7 @@
     &-Episodes {
         display: flex;
         flex-direction: column;
-        width: 20%;
+        width: 25%;
         background-color: $RubyPlex-DarkBlue;
         color: $RubyPlex-White;
         overflow: auto;
@@ -29,18 +29,22 @@
             gap: 20px;
             padding: 0 1em;
             height: 50px;
-            &:hover{
+
+            &:hover {
                 background-color: $RubyPlex-LightBlue;
             }
-            &.active{
+
+            &.active {
                 background-color: $RubyPlex-LightBlue;
             }
+
             &-EpNumber {
                 margin: 0;
                 font-weight: bold;
                 font-size: 12pt;
             }
-            &-EpName{
+
+            &-EpName {
                 font-size: 11pt;
             }
         }
@@ -48,9 +52,33 @@
 
     &-Video {
         width: 70%;
-        & video{
-            width: 90%;
+
+        &>div:nth-child(1) {
+            display: flex;
+            justify-content: center
+        }
+
+        & video {
+            width: 100%;
             height: 500px;
+        }
+
+        &__Description {
+            color: $RubyPlex-White;
+            background: $RubyPlex-DarkBlue;
+            color: $RubyPlex-White;
+            padding: 0.75em;
+            border-radius: 0.25rem;
+        }
+
+        &_WatchMore {
+            padding: 0.75em;
+            color: $RubyPlex-White;
+
+            &__Seasons {
+                display: flex;
+                gap: 2em;
+            }
         }
     }
 }

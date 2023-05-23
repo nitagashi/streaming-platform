@@ -15,6 +15,7 @@ function SerieShow() {
             setShow(res.data)
         })
         fetchEpisodes(currentSeason);
+        // eslint-disable-next-line
     }, [])
     const fetchEpisodes = (seasonNr) => {
         SeriesService.getSerieEpisodes(params.id, seasonNr).then((res) => {
@@ -53,7 +54,7 @@ function SerieShow() {
                     </div>
                     <div className="Show-Description-Section--BtnContainer">
                         {show.seasons != null ? show.seasons.map((season) => {
-                            return <button onClick={() => { fetchEpisodes(season.season_number) }} className={currentSeason === season.season_number ? "Show-Description-Section__Btn-Active" : "Show-Description-Section__Btn"}>{season.name}</button>
+                            return <button onClick={() => { fetchEpisodes(season.season_number) }} className={currentSeason === season.season_number ? "Show-Description-Section__Btn-Active" : "Show-Description-Section__Btn"}>Season {season.season_number}</button>
                         }) : ''}
                     </div>
                 </div>
