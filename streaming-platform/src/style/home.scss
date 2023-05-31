@@ -24,21 +24,66 @@
             position: absolute;
             font-size: 15pt;
             top: 6em;
+
+            @include respond-to("s-mobile") {
+                font-size: 11pt;
+                top: 6em;
+            }
+            @include respond-to("l-mobile") {
+                font-size: 12pt;
+            }
+            @include respond-to("tablet") {
+                font-size: 13pt;
+                top: 5em;
+            }
+            @include respond-to("laptop") {
+                font-size: 14pt;
+            }
         }
 
         &__Description {
             position: absolute;
-            font-size: 23pt;
             top: 5em;
-            max-width: 50vw;
             font-weight: 500;
+
+            @include respond-to("s-mobile") {
+                max-width: 100%;
+                font-size: 15pt;
+                top: 6em;
+            }
+            @include respond-to("l-mobile") {
+                max-width: 100%;
+                font-size: 16pt;
+                top: 6em;
+            }
+            @include respond-to("tablet") {
+                font-size: 18pt;
+                top: 5em;
+            }
+            @include respond-to("laptop") {
+                font-size: 23pt;
+                max-width: 75vw;
+                top: 4em;
+            }
         }
 
         &__Buttons {
             position: relative;
             left: 0px;
-            top: 21em;
+            top: 18em;
 
+            @include respond-to("s-mobile") {
+                top: 15em;
+            }
+            @include respond-to("m-mobile") {
+                top: 13em;
+            }
+            @include respond-to("l-mobile") {
+                top: 14em;
+            }
+            @include respond-to("laptop") {
+                top: 16em;
+            }
             & button {
                 position: relative;
                 padding: 10px 20px;
@@ -80,7 +125,7 @@
         }
     }
 
-    & .SeriesCardCarousel{
+    & .SeriesCardCarousel {
         height: 300px;
     }
 
@@ -108,6 +153,11 @@
             align-items: center;
             user-select: none;
             padding-bottom: 2em;
+
+            >ul {
+                width: 100%;
+                gap: 2em;
+            }
         }
     }
 }
@@ -119,6 +169,7 @@
     height: 320px;
     perspective: 1000px;
     cursor: pointer;
+
     &-Inner {
         position: relative;
         width: 100%;

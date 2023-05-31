@@ -67,38 +67,6 @@ button {
                 width: 100%;
             }
 
-            // button:hover p::before {
-            //     width: 100%;
-            // }
-
-            // &::before {
-            //     content: '';
-            //     position: absolute;
-            //     left: 0;
-            //     bottom: 0;
-            //     height: 2px;
-            //     width: 0;
-            //     background-color: $RubyPlex-Red;
-            //     transition: .5s ease;
-            // }
-
-            // &:hover {
-            //     &::before {
-            //         width: 100%;
-            //     }
-            // }
-
-            // &:active {
-            //     &::before {
-            //         content: '';
-            //         position: absolute;
-            //         width: 100%;
-            //         opacity: 0.3;
-            //         background-color: $RubyPlex-LightRed;
-            //         transition: .5s ease;
-            //     }
-            // }
-
             &-active {
                 &::before {
                     content: '';
