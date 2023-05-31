@@ -1,11 +1,11 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom';
 import Home from 'views/Home';
-import MovieShow from 'views/MovieShow';
-import MovieVideo from 'views/MovieVideo';
-import SerieShow from 'views/SerieShow';
-import SerieVideo from 'views/SerieVideo';
-import ShowVideo from 'views/SerieVideo';
+import MovieShow from 'views/Movies/MovieShow';
+import MovieVideo from 'views/Movies/MovieVideo';
+import SerieShow from 'views/Series/SerieShow';
+import SerieVideo from 'views/Series/SerieVideo';
+import ShowVideo from 'views/Series/SerieVideo';
 
 function AppRoutes() {
     return (

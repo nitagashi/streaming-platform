@@ -8,6 +8,7 @@ button {
     width: 100%;
     background-color: $RubyPlex-DarkBlue;
     height: 4em;
+    flex-wrap: wrap;
 
     &-list {
         margin-left: 1em;
@@ -21,41 +22,82 @@ button {
         }
 
         &__btn {
-            font-size: 17px;
-            padding: 0.5em 1em;
             position: relative;
-            transition: .5s ease;
-            color: $RubyPlex-White;
+            display: flex;
+            font-weight: 600;
+            font-size: 20px;
+            gap: 0.5rem;
+            align-items: center;
 
-            &::before {
-                content: '';
+            & p {
+                margin: 0;
+                position: relative;
+                font-size: 20px;
+                color:  $RubyPlex-White
+            }
+
+            &::after {
                 position: absolute;
-                left: 0;
-                bottom: 0;
-                height: 2px;
+                content: "";
                 width: 0;
-                background-color: $RubyPlex-Red;
-                transition: .5s ease;
+                left: 0;
+                bottom: -7px;
+                background: $RubyPlex-LightRed;
+                height: 2px;
+                transition: 0.3s ease-out;
             }
 
-            &:hover {
-                color: $RubyPlex-White;
-
-                &::before {
-                    width: 100%;
-                }
+            & p::before {
+                font-size: 20px;
+                font-weight: 600;
+                position: absolute;
+                content: attr(name);
+                width: 0%;
+                inset: 0;
+                color: $RubyPlex-LightRed;
+                overflow: hidden;
+                transition: 0.3s ease-out;
             }
 
-            &:active {
-                &::before {
-                    content: '';
-                    position: absolute;
-                    width: 100%;
-                    opacity: 0.3;
-                    background-color: $RubyPlex-LightRed;
-                    transition: .5s ease;
-                }
+            &:hover::after {
+                width: 100%;
             }
+
+            &:hover p::before {
+                width: 100%;
+            }
+
+            // button:hover p::before {
+            //     width: 100%;
+            // }
+
+            // &::before {
+            //     content: '';
+            //     position: absolute;
+            //     left: 0;
+            //     bottom: 0;
+            //     height: 2px;
+            //     width: 0;
+            //     background-color: $RubyPlex-Red;
+            //     transition: .5s ease;
+            // }
+
+            // &:hover {
+            //     &::before {
+            //         width: 100%;
+            //     }
+            // }
+
+            // &:active {
+            //     &::before {
+            //         content: '';
+            //         position: absolute;
+            //         width: 100%;
+            //         opacity: 0.3;
+            //         background-color: $RubyPlex-LightRed;
+            //         transition: .5s ease;
+            //     }
+            // }
 
             &-active {
                 &::before {

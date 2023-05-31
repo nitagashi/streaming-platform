@@ -35,7 +35,7 @@ function MovieVideo() {
                     if (clip.air_date !== null)
                         return (
                             <button
-                                className={currentClip == clip.key ? 'SerieVideo-Episodes__Btn active' : 'SerieVideo-Episodes__Btn'}
+                                className={currentClip === clip.key ? 'SerieVideo-Episodes__Btn active' : 'SerieVideo-Episodes__Btn'}
                                 onClick={() => { changeClip(clip.key) }}
                             >
                                 <p className='SerieVideo-Episodes__Btn-EpName'>{clip.name}</p>

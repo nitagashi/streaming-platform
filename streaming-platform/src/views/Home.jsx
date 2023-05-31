@@ -24,40 +24,68 @@ function Home() {
     }, [])
 
     const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 3000 },
-            items: 10
+        extraSuperLargeDesktop: {
+            breakpoint: { max: 2500, min: 1701 },
+            items: 8
         },
-        desktop: {
-            breakpoint: { max: 3000, min: 1024 },
+        superLargeDesktop: {
+            breakpoint: { max: 1700, min: 1400 },
             items: 7
         },
+        desktop: {
+            breakpoint: { max: 1400, min: 1151 },
+            items: 6
+        },
         tablet: {
-            breakpoint: { max: 1024, min: 464 },
+            breakpoint: { max: 1150, min: 901 },
+            items: 5
+        },
+        small_tablet: {
+            breakpoint: { max: 900, min: 701 },
+            items: 4
+        },
+        large_mobile: {
+            breakpoint: { max: 700, min: 501 },
             items: 3
         },
-        mobile: {
-            breakpoint: { max: 464, min: 0 },
+        medium_mobile: {
+            breakpoint: { max: 500, min: 401 },
             items: 2
+        },
+        small_mobile: {
+            breakpoint: { max: 401, min: 320 },
+            items: 2
+        },
+        extra_small_mobile: {
+            breakpoint: { max: 400, min: 0 },
+            items: 1
         }
     };
     const responsiveSeries = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 3000 },
-            items: 6
+        extraSuperLargeDesktop: {
+            breakpoint: { max: 2500, min: 1701 },
+            items: 7
         },
-        desktop: {
-            breakpoint: { max: 3000, min: 1024 },
+        superLargeDesktop: {
+            breakpoint: { max: 1700, min: 1375 },
             items: 5
         },
+        desktop: {
+            breakpoint: { max: 1375, min: 1150 },
+            items: 4
+        },
         tablet: {
-            breakpoint: { max: 1024, min: 464 },
+            breakpoint: { max: 1150, min: 850 },
             items: 3
         },
-        mobile: {
-            breakpoint: { max: 464, min: 0 },
+        small_tablet: {
+            breakpoint: { max: 850, min: 550 },
             items: 2
-        }
+        },
+        small_mobile: {
+            breakpoint: { max: 550, min: 0 },
+            items: 1
+        },
     };
     return (
         <div className='Home'>

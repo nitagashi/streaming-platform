@@ -62,7 +62,7 @@ function SerieVideo() {
                     if (episode.air_date !== null)
                         return (
                             <button
-                                className={currentEpisode == episode.episode_number ? 'SerieVideo-Episodes__Btn active' : 'SerieVideo-Episodes__Btn'}
+                                className={currentEpisode === episode.episode_number ? 'SerieVideo-Episodes__Btn active' : 'SerieVideo-Episodes__Btn'}
                                 onClick={() => { changeEpisode(episode.episode_number) }}>
                                 <p className='SerieVideo-Episodes__Btn-EpNumber'>{episode.episode_number}</p>
                                 <p className='SerieVideo-Episodes__Btn-EpName'>{episode.name}</p>

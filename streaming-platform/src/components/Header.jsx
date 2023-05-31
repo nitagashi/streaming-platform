@@ -6,9 +6,9 @@ function Header() {
         <header className="Header">
             <div className='Header-list'>
                 <img className='Header-list__logo' src={require('images/logo.png')} alt='logo' />
-                <button className='Header-list__btn'><Link to='/' >Home</Link></button>
-                <button className='Header-list__btn'>Movie</button>
-                <button className='Header-list__btn'>Series</button>
+                <button className='Header-list__btn'><Link to='/' ><p name='Home'>Home</p></Link></button>
+                <button className='Header-list__btn'><p name='Movie'>Movie</p></button>
+                <button className='Header-list__btn'><p name='Series'>Series</p></button>
             </div>
         </header>
     );
