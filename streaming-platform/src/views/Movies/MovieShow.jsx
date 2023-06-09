@@ -25,15 +25,15 @@ function MovieShow() {
         })
     }
     const getPercentage = (percentage) => {
-        return percentage*10
+        return Math.round(percentage * 10)
     }
     return show != null ? (
         <div className="Show">
-            <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
-            <div className="Show-ImageContainer">
-                <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} alt="Show Backdrop" />
-            </div>
             <div className='Show-Description'>
+                <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
+                <div className="Show-ImageContainer">
+                    <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} alt="Show Backdrop" />
+                </div>
                 <div className="Show-Description-Section">
                     <p className="Show-Description-Section__Title">{show.original_title}</p>
                     <div className="Show-Description-Section__Genres">
@@ -44,7 +44,7 @@ function MovieShow() {
                                 : ''
                         }
                     </div>
-                    <CircularProgress percentage = {getPercentage(show.vote_average)}/>
+                    <CircularProgress percentage={getPercentage(show.vote_average)} />
                     <div>
                         <b>Description:</b><br />
                     </div>

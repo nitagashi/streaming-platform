@@ -28,7 +28,7 @@ function SerieShow() {
         })
     }
     const getPercentage = (percentage) => {
-        return percentage * 10
+        return Math.round(percentage * 10)
     }
     return (
         <div className="Show">
@@ -58,27 +58,22 @@ function SerieShow() {
                     </div>
                 </div>
             </div>
-            <div>
-                <div className="Show-Description-Section-Buttons">
+            <div className="Show-Season">
+                <div className="Show-Season-Buttons">
                     {show.seasons != null ? show.seasons.map((season) => {
-                        return <div className="Show-Description-Section-BtnContainer"><button onClick={() => { fetchEpisodes(season.season_number) }} className={currentSeason === season.season_number ? "Show-Description-Section__Btn-Active" : "Show-Description-Section__Btn"}>Season {season.season_number}</button></div>
+                        return <div className="Show-Season-BtnContainer"><button onClick={() => { fetchEpisodes(season.season_number) }} className={currentSeason === season.season_number ? "Show-Season__Btn-Active" : "Show-Season__Btn"}>Season {season.season_number}</button></div>
                     }) : ''}
                 </div>
-                <div className="Show-Description-Section">
-                    {/* <div className="Show-Description-Section__Title">
-                        <b>Episodes:</b>
-                    </div> */}
-                    <div className="Show-Description-Section-Episodes">
-                        {season.episodes != null ? season.episodes.map((episode) => {
-                            if (episode.air_date != null)
-                                return (
-                                    <div onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.episode_number}`)}>
-                                        <EpisodeCard episode = {episode} />
-                                    </div>)
-                            else
-                                return ''
-                        }) : ''}
-                    </div>
+                <div className="Show-Season-Episodes">
+                    {season.episodes != null ? season.episodes.map((episode) => {
+                        if (episode.air_date != null)
+                            return (
+                                <div onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.episode_number}`)}>
+                                    <EpisodeCard episode={episode} />
+                                </div>)
+                        else
+                            return ''
+                    }) : ''}
                 </div>
             </div>
         </div>

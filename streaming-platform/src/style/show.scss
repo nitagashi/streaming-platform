@@ -36,12 +36,14 @@
     &-Description {
         display: flex;
         gap: 1em;
+        z-index: 1000;
 
         &-Sections {
             z-index: 1000;
         }
 
         &-Section {
+            z-index: 1000;
             display: flex;
             flex-direction: column;
             gap: 0.5em;
@@ -68,73 +70,82 @@
             &__WatchNow {
                 margin-top: 2em;
             }
+        }
+    }
 
-            &-Buttons {
-                display: flex;
-                gap: 1em;
-                padding: 1em;
-                background: #1e1e2b;
-                border-radius: 5px;
-                margin-bottom: 1em;
-            }
-            &-Episodes{
-                display: flex;
-                justify-content: center;
-                gap: 1em;
-                flex-wrap: wrap;
-            }
-            &__Btn {
+    &-Season {
+        background: #1e1e2b;
+
+        &-Buttons {
+            display: flex;
+            gap: 1em;
+            padding: 1em;
+            background: #1e1e2b;
+            border-radius: 5px;
+            margin-bottom: 1em;
+        }
+
+        &__Btn {
+            position: relative;
+            cursor: pointer;
+            background: $RubyPlex-VeryDarkBlue;
+            color: $RubyPlex-White;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            transition-delay: 0.15s;
+            transition-duration: 400ms;
+
+            &-Active {
                 position: relative;
-                cursor: pointer;
-                background: $RubyPlex-VeryDarkBlue;
-                color: $RubyPlex-White;
+                background-color: #39394e;
                 padding: 8px 16px;
                 border-radius: 4px;
-                transition: background-color 0.3s ease;
-                transition-delay: 0.15s;
-                transition-duration: 400ms;
-                
-                &-Active {
-                    position: relative;
-                    background-color: #39394e;
-                    padding: 8px 16px;
-                    border-radius: 4px;
-                    color: $RubyPlex-White;
-                    &:after {
-                        content: "";
-                        pointer-events: none;
-                        bottom: -2px;
-                        width: 100% !important;
-                        left: 0 !important;
-                        position: absolute;
-                        height: 2px;
-                        background-color: #fff;
-                        transition-duration: 400ms;
-                        transition-property: width, left;
-                    }
-                }
-                &:hover {
-                    background-color: $RubyPlex-LightBlue;
-                    color: #fff;
-                    &:after {
-                        width: 100%;
-                        left: 0%;
-                    }
-                }
+                color: $RubyPlex-White;
+
                 &:after {
                     content: "";
                     pointer-events: none;
                     bottom: -2px;
-                    left: 50%;
+                    width: 100% !important;
+                    left: 0 !important;
                     position: absolute;
-                    width: 0%;
                     height: 2px;
                     background-color: #fff;
-                    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
                     transition-duration: 400ms;
                     transition-property: width, left;
                 }
             }
+
+            &:hover {
+                background-color: $RubyPlex-LightBlue;
+                color: #fff;
+
+                &:after {
+                    width: 100%;
+                    left: 0%;
+                }
+            }
+
+            &:after {
+                content: "";
+                pointer-events: none;
+                bottom: -2px;
+                left: 50%;
+                position: absolute;
+                width: 0%;
+                height: 2px;
+                background-color: #fff;
+                transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+                transition-duration: 400ms;
+                transition-property: width, left;
+            }
+        }
+        &-Episodes{
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+            flex-wrap: wrap;
         }
     }
 }
