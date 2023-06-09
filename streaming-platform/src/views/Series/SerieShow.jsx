@@ -3,6 +3,7 @@ import CircularProgress from 'components/Pixi/CircularProgress';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import SeriesService from 'services/SeriesServices';
+import EpisodeCard from './EpisodeCard';
 
 function SerieShow() {
     const [show, setShow] = useState([]);
@@ -64,13 +65,16 @@ function SerieShow() {
                     }) : ''}
                 </div>
                 <div className="Show-Description-Section">
-                    <div className="Show-Description-Section__Title">
+                    {/* <div className="Show-Description-Section__Title">
                         <b>Episodes:</b>
-                    </div>
-                    <div className="Show-Description-Section--BtnContainer">
+                    </div> */}
+                    <div className="Show-Description-Section-Episodes">
                         {season.episodes != null ? season.episodes.map((episode) => {
                             if (episode.air_date != null)
-                                return <button onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.episode_number}`)} className="Show-Description-Section__Btn">Episode {episode.episode_number}</button>
+                                return (
+                                    <div onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.episode_number}`)}>
+                                        <EpisodeCard episode = {episode} />
+                                    </div>)
                             else
                                 return ''
                         }) : ''}

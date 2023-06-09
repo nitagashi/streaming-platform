@@ -29,13 +29,16 @@
                 font-size: 11pt;
                 top: 6em;
             }
+
             @include respond-to("l-mobile") {
                 font-size: 12pt;
             }
+
             @include respond-to("tablet") {
                 font-size: 13pt;
                 top: 5em;
             }
+
             @include respond-to("laptop") {
                 font-size: 14pt;
             }
@@ -51,15 +54,18 @@
                 font-size: 15pt;
                 top: 6em;
             }
+
             @include respond-to("l-mobile") {
                 max-width: 100%;
                 font-size: 16pt;
                 top: 6em;
             }
+
             @include respond-to("tablet") {
                 font-size: 18pt;
                 top: 5em;
             }
+
             @include respond-to("laptop") {
                 font-size: 23pt;
                 max-width: 75vw;
@@ -75,12 +81,15 @@
             @include respond-to("s-mobile") {
                 top: 15em;
             }
+
             @include respond-to("m-mobile") {
                 top: 13em;
             }
+
             @include respond-to("l-mobile") {
                 top: 14em;
             }
+
             @include respond-to("laptop") {
                 top: 16em;
             }
@@ -265,7 +274,8 @@
         color: $RubyPlex-White;
         font-size: 14pt;
         padding: 0.5em;
-
+        text-overflow: ellipsis;
+        max-width: 275px;
         &:hover {
             visibility: visible;
         }
