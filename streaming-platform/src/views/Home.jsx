@@ -99,7 +99,7 @@ function Home() {
                 </p>
                 <div className='Home-Banner__Buttons'>
                     <a href="#movies">
-                        <button>
+                        <button className='RubyButton'>
                             Watch Now.
                         </button>
                     </a>

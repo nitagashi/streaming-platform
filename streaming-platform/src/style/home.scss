@@ -84,44 +84,6 @@
             @include respond-to("laptop") {
                 top: 16em;
             }
-            & button {
-                position: relative;
-                padding: 10px 20px;
-                border-radius: 7px;
-                border: 1px solid $RubyPlex-MediumRed;
-                background: $RubyPlex-MediumRed-Transparent;
-                letter-spacing: 2px;
-                overflow: hidden;
-                transition: all 0.2s ease-in;
-
-                &:hover {
-                    background: $RubyPlex-MediumRed;
-                    box-shadow: 0 0 30px 5px $RubyPlex-MediumRed;
-                    transition: all 0.2s ease-out;
-                }
-
-                &:hover::before {
-                    animation: swipe 0.5s 0s linear;
-                }
-
-                &::before {
-                    content: '';
-                    display: block;
-                    width: 0px;
-                    height: 86%;
-                    position: absolute;
-                    top: 7%;
-                    left: 0%;
-                    opacity: 0;
-                    background: $RubyPlex-White;
-                    box-shadow: 0 0 50px 30px $RubyPlex-White;
-                }
-
-                &:active {
-                    box-shadow: 0 0 0 0 transparent;
-                    transition: box-shadow 0.2s ease-in;
-                }
-            }
         }
     }
 

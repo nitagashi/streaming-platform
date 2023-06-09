@@ -1,3 +1,5 @@
+import { Chip } from '@mui/material';
+import CircularProgress from 'components/Pixi/CircularProgress';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import MovieService from 'services/MovieServices';
@@ -22,41 +24,46 @@ function MovieShow() {
             setVideo(res.data)
         })
     }
-    return (
+    const getPercentage = (percentage) => {
+        return percentage*10
+    }
+    return show != null ? (
         <div className="Show">
+            <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
             <div className="Show-ImageContainer">
                 <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} alt="Show Backdrop" />
+                {/* <LineGraph /> */}
             </div>
             <div className='Show-Description'>
                 <div className="Show-Description-Section">
-                    <p><b>Name:</b> {show.original_title}</p>
-                    <p><b>Status:</b> {show.status}</p>
-                    <p><b>Airing Date:</b> {show.release_date}</p>
-                    <p><b>Episodes:</b> {show.number_of_episodes}</p>
-                </div>
-                <div className="Show-Description-Section">
-                    <div className="Show-Description-Section__Title">
-                        <b>Genres:</b>
+                    <p className="Show-Description-Section__Title">{show.original_title}</p>
+                    <div className="Show-Description-Section__Genres">
+                        {
+                            show.genres != null ? show.genres.map((genre) => {
+                                return <Chip label={genre.name} size="small"></Chip>
+                            })
+                                : ''
+                        }
                     </div>
-                    {show.genres != null ? show.genres.map((genre) => genre.name).join(', ') : ''}
-                </div>
-                <div className="Show-Description-Section">
-                    <div className="Show-Description-Section__Title">
-                        <b>Overview:</b><br />
+                    {/* <div>Release: {show.release_date}</div>
+                    <p><b>Status:</b> {show.status}</p> */}
+                    <div>
+                        <b>Description:</b><br />
                     </div>
                     {show.overview}
-                </div>
-                <div className="Show-Description-Section">
-                    <div className="Show-Description-Section__Title">
-                        <b>Movie:</b>
-                    </div>
-                    <div className="Show-Description-Section--BtnContainer">
-                        <button className="Show-Description-Section__Btn" onClick={() => {navigate(`/MovieVideo/${id}`)}}>Movie</button>
+                    {console.log(show.vote_average)}
+                    <CircularProgress percentage = {getPercentage(show.vote_average)}/>
+                    <div className="Show-Description-Section__WatchNow">
+                        <div onClick={() => { navigate(`/MovieVideo/${id}`) }}>
+                            <button className='RubyButton'>
+                                Watch Now.
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    );
+    ) : (<div>Loading...</div>);
 }
 
 export default MovieShow;

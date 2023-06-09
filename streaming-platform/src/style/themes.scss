@@ -4,12 +4,52 @@ $RubyPlex-MediumRed: #8b0000;
 $RubyPlex-MediumRed-Transparent: #8b00006e;
 $RubyPlex-LightRed: #ffabab;
 $RubyPlex-Red: #ff1a1a;
-$RubyPlex-Black: #000000;
+$RubyPlex-Black: #1d1d1f;
 $RubyPlex-DarkGrey: #0f0f0f;
 $RubyPlex-MediumGrey: #171717;
 $RubyPlex-LightGrey: #afafaf;
 $RubyPlex-LightBlue: #39394e;
 $RubyPlex-DarkBlue: #1e1e2b;
 $RubyPlex-VeryDarkBlue: #111114;
-$RubyPlex-White: #ffffff;
+$RubyPlex-White: #f5f5f7;
 $RubyPlex-Footer: #121218;
+
+
+.RubyButton {
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 7px;
+    border: 1px solid $RubyPlex-MediumRed;
+    background: $RubyPlex-MediumRed-Transparent;
+    letter-spacing: 2px;
+    overflow: hidden;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+        background: $RubyPlex-MediumRed;
+        box-shadow: 0 0 30px 5px $RubyPlex-MediumRed;
+        transition: all 0.2s ease-out;
+    }
+
+    &:hover::before {
+        animation: swipe 0.5s 0s linear;
+    }
+
+    &::before {
+        content: '';
+        display: block;
+        width: 0px;
+        height: 86%;
+        position: absolute;
+        top: 7%;
+        left: 0%;
+        opacity: 0;
+        background: $RubyPlex-White;
+        box-shadow: 0 0 50px 30px $RubyPlex-White;
+    }
+
+    &:active {
+        box-shadow: 0 0 0 0 transparent;
+        transition: box-shadow 0.2s ease-in;
+    }
+}
