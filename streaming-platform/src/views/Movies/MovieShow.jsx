@@ -32,7 +32,6 @@ function MovieShow() {
             <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
             <div className="Show-ImageContainer">
                 <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} alt="Show Backdrop" />
-                {/* <LineGraph /> */}
             </div>
             <div className='Show-Description'>
                 <div className="Show-Description-Section">
@@ -45,14 +44,11 @@ function MovieShow() {
                                 : ''
                         }
                     </div>
-                    {/* <div>Release: {show.release_date}</div>
-                    <p><b>Status:</b> {show.status}</p> */}
+                    <CircularProgress percentage = {getPercentage(show.vote_average)}/>
                     <div>
                         <b>Description:</b><br />
                     </div>
                     {show.overview}
-                    {console.log(show.vote_average)}
-                    <CircularProgress percentage = {getPercentage(show.vote_average)}/>
                     <div className="Show-Description-Section__WatchNow">
                         <div onClick={() => { navigate(`/MovieVideo/${id}`) }}>
                             <button className='RubyButton'>

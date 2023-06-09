@@ -1,3 +1,5 @@
+import { Chip } from '@mui/material';
+import CircularProgress from 'components/Pixi/CircularProgress';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import SeriesService from 'services/SeriesServices';
@@ -24,39 +26,42 @@ function SerieShow() {
             setCurrentSeason(seasonNr);
         })
     }
+    const getPercentage = (percentage) => {
+        return percentage * 10
+    }
     return (
         <div className="Show">
-            <div className="Show-ImageContainer">
-                <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} alt="Show Backdrop" />
-            </div>
             <div className='Show-Description'>
-                <div className="Show-Description-Section">
-                    <p><b>Name:</b> {show.name}</p>
-                    <p><b>Status:</b> {show.status}</p>
-                    <p><b>Airing Date:</b> {show.first_air_date}</p>
-                    <p><b>Episodes:</b> {show.number_of_episodes}</p>
+                <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
+                <div className="Show-ImageContainer">
+                    <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${season.poster_path}`} alt="Show Backdrop" />
                 </div>
-                <div className="Show-Description-Section">
-                    <div className="Show-Description-Section__Title">
-                        <b>Genres:</b>
+                <div className='Show-Description-Sections'>
+                    <div className="Show-Description-Section">
+                        <p className="Show-Description-Section__Title">{season.name}</p>
+                        <div className="Show-Description-Section__Genres">
+                            {
+                                show.genres != null ? show.genres.map((genre) => {
+                                    return <Chip label={genre.name} size="small"></Chip>
+                                })
+                                    : ''
+                            }
+                        </div>
+                        <CircularProgress percentage={getPercentage(show.vote_average)} />
                     </div>
-                    {show.genres != null ? show.genres.map((genre) => genre.name).join(', ') : ''}
+                    <div className="Show-Description-Section">
+                        <div>
+                            <b>Description:</b><br />
+                        </div>
+                        {show.overview}
+                    </div>
                 </div>
-                <div className="Show-Description-Section">
-                    <div className="Show-Description-Section__Title">
-                        <b>Overview:</b><br />
-                    </div>
-                    {show.overview}
-                </div>
-                <div className="Show-Description-Section">
-                    <div className="Show-Description-Section__Title">
-                        <b>Seasons:</b>
-                    </div>
-                    <div className="Show-Description-Section--BtnContainer">
-                        {show.seasons != null ? show.seasons.map((season) => {
-                            return <button onClick={() => { fetchEpisodes(season.season_number) }} className={currentSeason === season.season_number ? "Show-Description-Section__Btn-Active" : "Show-Description-Section__Btn"}>Season {season.season_number}</button>
-                        }) : ''}
-                    </div>
+            </div>
+            <div>
+                <div className="Show-Description-Section-Buttons">
+                    {show.seasons != null ? show.seasons.map((season) => {
+                        return <div className="Show-Description-Section-BtnContainer"><button onClick={() => { fetchEpisodes(season.season_number) }} className={currentSeason === season.season_number ? "Show-Description-Section__Btn-Active" : "Show-Description-Section__Btn"}>Season {season.season_number}</button></div>
+                    }) : ''}
                 </div>
                 <div className="Show-Description-Section">
                     <div className="Show-Description-Section__Title">
@@ -64,7 +69,7 @@ function SerieShow() {
                     </div>
                     <div className="Show-Description-Section--BtnContainer">
                         {season.episodes != null ? season.episodes.map((episode) => {
-                            if(episode.air_date != null)
+                            if (episode.air_date != null)
                                 return <button onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.episode_number}`)} className="Show-Description-Section__Btn">Episode {episode.episode_number}</button>
                             else
                                 return ''
