@@ -69,16 +69,26 @@ button {
                 width: 100%;
             }
 
-            &-active {
+            &.active {
+                & p::before {
+                    font-size: 20px;
+                    font-weight: 600;
+                    position: absolute;
+                    content: attr(name);
+                    width: 100%;
+                    color: $RubyPlex-LightRed;
+                    letter-spacing: 1px;
+                    // -webkit-text-stroke: 1px;
+                    overflow: hidden;
+                }
                 &::before {
                     content: '';
                     position: absolute;
                     left: 0;
-                    bottom: 0;
+                    bottom: -7px;
                     height: 2px;
                     width: 100%;
-                    background-color: $RubyPlex-MediumRed;
-                    transition: .5s ease;
+                    background-color: $RubyPlex-LightRed;
                 }
                 color: $RubyPlex-LightRed;
             }

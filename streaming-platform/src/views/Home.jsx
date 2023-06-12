@@ -106,7 +106,9 @@ function Home() {
                 </div>
             </div>
             <div id="movies" className='Home-LatestMovie'>
-                <p className='Home-LatestMovie__Title'>Trending Movies</p>
+                <div className='Home-LatestMovie-Title'>
+                    <p>Trending Movies</p>
+                </div>
                 <Carousel
                     swipeable={true}
                     draggable={false}
@@ -124,7 +126,6 @@ function Home() {
                 >
                     {
                         movies.map((movie) => {
-                            console.log(movie);
                             return (
                                 <Link to={"/MovieShow/" + movie.id}>
                                     <FlipCard id={movie.id} key={movie.id} />
@@ -135,7 +136,9 @@ function Home() {
                 </Carousel>
             </div>
             <div className='Home-LatestMovie SeriesCardCarousel'>
-                <p className='Home-LatestMovie__Title'>Trending Series</p>
+                <div className='Home-LatestMovie-Title'>
+                    <p>Trending Series</p>
+                </div>
                 <Carousel
                     swipeable={true}
                     draggable={false}
@@ -163,7 +166,9 @@ function Home() {
                 </Carousel>
             </div>
             <div className='Home-LatestMovie SeriesCardCarousel'>
-                <p className='Home-LatestMovie__Title'>Top Rated Series</p>
+                <div className='Home-LatestMovie-Title'>
+                    <p>Top Rated Series</p>
+                </div>
                 <Carousel
                     swipeable={true}
                     draggable={false}

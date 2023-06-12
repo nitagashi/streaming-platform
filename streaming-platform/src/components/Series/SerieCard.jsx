@@ -7,7 +7,6 @@ function SerieCard(props) {
 
     useEffect(() => {
         SeriesService.getSerieById(id).then((res) => {
-            console.log(res.data);
             setSerie(res.data)
         })
     }, [])
