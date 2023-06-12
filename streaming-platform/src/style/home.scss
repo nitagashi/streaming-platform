@@ -270,6 +270,7 @@
 
     &__Title {
         position: absolute;
+        -webkit-text-stroke: 0.7px black;
         bottom: 0;
         color: $RubyPlex-White;
         font-size: 14pt;

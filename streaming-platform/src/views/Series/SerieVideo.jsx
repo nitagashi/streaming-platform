@@ -62,7 +62,7 @@ function SerieVideo() {
                     if (episode.air_date !== null)
                         return (
                             <button
-                                className={currentEpisode === episode.episode_number ? 'SerieVideo-Episodes__Btn active' : 'SerieVideo-Episodes__Btn'}
+                                className={currentEpisode == episode.episode_number ? 'SerieVideo-Episodes__Btn active' : 'SerieVideo-Episodes__Btn'}
                                 onClick={() => { changeEpisode(episode.episode_number) }}>
                                 <p className='SerieVideo-Episodes__Btn-EpNumber'>{episode.episode_number}</p>
                                 <p className='SerieVideo-Episodes__Btn-EpName'>{episode.name}</p>
@@ -99,7 +99,7 @@ function SerieVideo() {
                                 serie.seasons.map((season) => {
                                     return (
                                         <div
-                                            className={currentSeason.season_number === season.season_number ? "Show-Description-Section__Btn-Active" : "Show-Description-Section__Btn"}
+                                            className={currentSeason.season_number === season.season_number ? "Show-Season__Btn-Active" : "Show-Season__Btn"}
                                             onClick={() => {
                                                 changeSeason(season.season_number)
                                             }}

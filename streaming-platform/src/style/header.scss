@@ -33,7 +33,8 @@ button {
                 margin: 0;
                 position: relative;
                 font-size: 20px;
-                color:  $RubyPlex-White
+                color:  $RubyPlex-White;
+                letter-spacing: 1px;
             }
 
             &::after {
@@ -53,8 +54,9 @@ button {
                 position: absolute;
                 content: attr(name);
                 width: 0%;
-                inset: 0;
                 color: $RubyPlex-LightRed;
+                letter-spacing: 1px;
+                // -webkit-text-stroke: 1px;
                 overflow: hidden;
                 transition: 0.3s ease-out;
             }
@@ -78,7 +80,6 @@ button {
                     background-color: $RubyPlex-MediumRed;
                     transition: .5s ease;
                 }
-
                 color: $RubyPlex-LightRed;
             }
         }

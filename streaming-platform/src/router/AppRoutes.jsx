@@ -6,11 +6,15 @@ import MovieVideo from 'views/Movies/MovieVideo';
 import SerieShow from 'views/Series/SerieShow';
 import SerieVideo from 'views/Series/SerieVideo';
 import ShowVideo from 'views/Series/SerieVideo';
+import Series from 'views/Series/Series';
+import Shows from 'views/Shows';
 
 function AppRoutes() {
     return (
         <Routes>
             <Route exact path='/' Component={Home} />
+            <Route exact path='/Shows' Component={Shows} />
+            <Route exact path='/Series' Component={Series} />
             <Route exact path='/SerieShow/:id' Component={SerieShow} />
             <Route exact path='/MovieShow/:id' Component={MovieShow} />
             <Route exact path='/SerieVideo/:idSerie/:seasonNr/:epNumber' Component={SerieVideo} />

@@ -74,13 +74,13 @@
     }
 
     &-Season {
-        background: #1e1e2b;
-
+        background: #1e1e2b54;
+        z-index: 1000;
         &-Buttons {
             display: flex;
             gap: 1em;
             padding: 1em;
-            background: #1e1e2b;
+            background: #1e1e2b70;
             border-radius: 5px;
             margin-bottom: 1em;
         }

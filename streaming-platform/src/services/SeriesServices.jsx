@@ -5,6 +5,9 @@ const ApiKey = process.env.REACT_APP_API_MOVIEDB_KEY;
 axios.defaults.headers['Cache-Control'] = 'no-cache';
 
 class seriesService{
+    async getSeries(page){
+        return axios.get(`${ApiUrl}/discover/tv?api_key=${ApiKey}&page=${page}`)
+    }
     async getTrendingSeries(){
         return axios.get(`${ApiUrl}/trending/tv/week?api_key=${ApiKey}`)
     }
