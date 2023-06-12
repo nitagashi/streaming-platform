@@ -275,10 +275,12 @@
 
     &__Title {
         position: absolute;
-        -webkit-text-stroke: 0.7px black;
+        // -webkit-text-stroke: 0.7px black;
+        background-color: #00000080;
+        width: calc(100% - 1em);
         bottom: 0;
         color: $RubyPlex-White;
-        font-size: 14pt;
+        font-size: 12pt;
         padding: 0.5em;
         text-overflow: ellipsis;
         max-width: 275px;

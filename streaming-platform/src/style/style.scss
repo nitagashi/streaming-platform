@@ -5,6 +5,12 @@
 @import './serieVideo.scss';
 @import './footer.scss';
 
+@font-face {
+  font-family: 'Signika';
+  src: url('../fonts/Signika_Negative/SignikaNegative-VariableFont_wght.ttf') format('truetype');
+  /* Add additional font properties if needed */
+}
+
 .App {
   position: relative;
 }
@@ -13,7 +19,9 @@ html {
   scroll-behavior: smooth;
   background-color: $RubyPlex-VeryDarkBlue;
 }
-
+p, div, h1, h2, h3, h4{
+  font-family: 'Signika';
+}
 a {
   text-decoration: none;
   color: white;
