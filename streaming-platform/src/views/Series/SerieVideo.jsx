@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import SeriesService from 'services/SeriesServices';
 import YouTube from 'react-youtube';
+import VideoBorder from 'components/Pixi/StarsRating';
 
 function SerieVideo() {
     const params = useParams()
@@ -75,7 +76,7 @@ function SerieVideo() {
             <div className='SerieVideo-Video'>
                 {
                     serieVideo !== null ? (
-                        <YouTube opts={opts} videoId={serieVideo.key} />
+                        <YouTube id="streamVideo" opts={opts} videoId={serieVideo.key} />
                     ) : (
                         <video src={require('assets/NotAvailable.mp4')} controls autoPlay={true}></video>
                     )

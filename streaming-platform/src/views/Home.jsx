@@ -6,6 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import SeriesService from 'services/SeriesServices';
 import SerieCard from 'components/Series/SerieCard';
 import { Link } from 'react-router-dom';
+import Slider from 'components/Pixi/StarsRating';
 
 function Home() {
     const [movies, setMovies] = useState([]);
@@ -105,6 +106,7 @@ function Home() {
                     </a>
                 </div>
             </div>
+            <Slider />
             <div id="movies" className='Home-LatestMovie'>
                 <div className='Home-LatestMovie-Title'>
                     <p>Trending Movies</p>

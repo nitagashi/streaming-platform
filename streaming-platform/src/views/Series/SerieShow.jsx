@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import SeriesService from 'services/SeriesServices';
 import EpisodeCard from './EpisodeCard';
+import StarsRating from 'components/Pixi/StarsRating';
 
 function SerieShow() {
     const [show, setShow] = useState([]);
@@ -30,12 +31,18 @@ function SerieShow() {
     const getPercentage = (percentage) => {
         return Math.round(percentage * 10)
     }
+    const handleStarChange = (value) => {
+        console.log(value);
+    }
     return (
         <div className="Show">
             <div className='Show-Description'>
                 <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
                 <div className="Show-ImageContainer">
                     <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${season.poster_path}`} alt="Show Backdrop" />
+                    <div>
+                        <StarsRating onChange={handleStarChange}/>
+                    </div>
                 </div>
                 <div className='Show-Description-Sections'>
                     <div className="Show-Description-Section">
