@@ -18,6 +18,9 @@
         height: auto;
         opacity: 0.5;
         filter: brightness(0.5);
+        &.Movie-Poster{
+            height: 500px !important;
+        }
     }
 
     &-ImageContainer {
@@ -30,7 +33,7 @@
         border-radius: 0.25rem;
         height: 100%;
         z-index: 1000;
-
+        
         &__Img {
             width: 240px;
         }

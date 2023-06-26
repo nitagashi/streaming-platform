@@ -1,13 +1,16 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Stage, Sprite, Graphics } from '@pixi/react';
 import * as PIXI from 'pixi.js';
-import star from 'images/star1.png'
+import star from 'images/star2.png'
 
 const StarsRating = ({ onChange }) => {
   const [x, setX] = useState(0);
-  const size = 30;
+  const size = 32;
   const draw = useCallback((g) => {
     g.clear();
+    g.beginFill(0xffff0b, 0.2);
+    g.drawRect(0, 0, size*5, size);
+    g.endFill();
     g.beginFill(0xffff0b, 1);
     g.drawRect(0, 0, x, size);
     g.endFill();

@@ -7,7 +7,7 @@ import SerieShow from 'views/Series/SerieShow';
 import SerieVideo from 'views/Series/SerieVideo';
 import ShowVideo from 'views/Series/SerieVideo';
 import Series from 'views/Series/Series';
-import Shows from 'views/Shows';
+import Shows from 'views/Movies/Shows';
 
 function AppRoutes() {
     return (

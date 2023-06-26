@@ -1,5 +1,6 @@
 import { Chip } from '@mui/material';
 import CircularProgress from 'components/Pixi/CircularProgress';
+import StarsRating from 'components/Pixi/StarsRating';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import MovieService from 'services/MovieServices';
@@ -27,12 +28,18 @@ function MovieShow() {
     const getPercentage = (percentage) => {
         return Math.round(percentage * 10)
     }
+    const handleStarChange = (value) => {
+        console.log(value);
+    }
     return show != null ? (
         <div className="Show">
             <div className='Show-Description'>
-                <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
+                <img className="Show-Banner Movie-Poster" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
                 <div className="Show-ImageContainer">
                     <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} alt="Show Backdrop" />
+                    <div>
+                        <StarsRating onChange={handleStarChange}/>
+                    </div>
                 </div>
                 <div className="Show-Description-Section">
                     <p className="Show-Description-Section__Title">{show.original_title}</p>

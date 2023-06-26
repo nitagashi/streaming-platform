@@ -23,8 +23,8 @@ const Footer = () => {
           <h3>Links</h3>
           <ul style={linkStyle}>
             <li><a href="/">Home</a></li>
-            <li><a href="/about">Movie</a></li>
-            <li><a href="/services">Series</a></li>
+            <li><a href="/Shows">Movie</a></li>
+            <li><a href="/Series">Series</a></li>
           </ul>
         </div>
         <div className="Footer-Content">
