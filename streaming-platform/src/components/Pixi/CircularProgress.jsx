@@ -34,13 +34,12 @@ function CircularProgress(props) {
           const newAngle = prevAngle + Math.PI / 180; 
           var percentage = Math.round(newAngle*100/(2*Math.PI));
           setProgress(percentage)
-          console.log("Percentage: " + percentage + "\nTarget %" + props.percentage + "\nAngle: " + newAngle + "\nTargetAngle: " + targetAngle);
+          // console.log("Percentage: " + percentage + "\nTarget %" + props.percentage + "\nAngle: " + newAngle + "\nTargetAngle: " + targetAngle);
           if(percentage >= props.percentage){
             clearInterval(interval);
           }
           return newAngle > targetAngle ? targetAngle : newAngle;
         });
-        console.log(angle);
       }, 1);
       return () => {
         clearInterval(interval);

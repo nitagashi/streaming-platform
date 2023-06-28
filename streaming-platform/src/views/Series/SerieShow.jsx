@@ -1,10 +1,11 @@
-import { Chip } from '@mui/material';
+import { Chip, Skeleton } from '@mui/material';
 import CircularProgress from 'components/Pixi/CircularProgress';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import SeriesService from 'services/SeriesServices';
 import EpisodeCard from './EpisodeCard';
 import StarsRating from 'components/Pixi/StarsRating';
+import SkeletonLoader from 'components/Loader/SkeletonLoader';
 
 function SerieShow() {
     const [show, setShow] = useState([]);
@@ -22,10 +23,12 @@ function SerieShow() {
         // eslint-disable-next-line
     }, [])
     const fetchEpisodes = (seasonNr) => {
+        setSeason([])
         SeriesService.getSerieEpisodes(params.id, seasonNr).then((res) => {
-            console.log(res.data);
-            setSeason(res.data)
-            setCurrentSeason(seasonNr);
+            setTimeout(() => {
+                setSeason(res.data)
+                setCurrentSeason(seasonNr);
+            }, 500);
         })
     }
     const getPercentage = (percentage) => {
@@ -41,7 +44,7 @@ function SerieShow() {
                 <div className="Show-ImageContainer">
                     <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${season.poster_path}`} alt="Show Backdrop" />
                     <div>
-                        <StarsRating onChange={handleStarChange}/>
+                        <StarsRating onChange={handleStarChange} />
                     </div>
                 </div>
                 <div className='Show-Description-Sections'>
@@ -72,15 +75,21 @@ function SerieShow() {
                     }) : ''}
                 </div>
                 <div className="Show-Season-Episodes">
-                    {season.episodes != null ? season.episodes.map((episode) => {
-                        if (episode.air_date != null)
-                            return (
-                                <div onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.episode_number}`)}>
-                                    <EpisodeCard episode={episode} />
-                                </div>)
-                        else
-                            return ''
-                    }) : ''}
+                    {
+                        season.episodes && season.episodes.length != 0 ? (
+                            season.episodes != null ? season.episodes.map((episode) => {
+                                if (episode.air_date != null)
+                                    return (
+                                        <div onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.episode_number}`)}>
+                                            <EpisodeCard episode={episode} />
+                                        </div>)
+                                else
+                                    return ''
+                            }) : '')
+                            : (
+                                <SkeletonLoader number={20} width={275} height={200}/>
+                            )
+                    }
                 </div>
             </div>
         </div>

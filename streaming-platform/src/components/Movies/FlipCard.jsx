@@ -1,3 +1,4 @@
+import { Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import MovieService from 'services/MovieServices';
 
@@ -10,7 +11,7 @@ function FlipCard(props) {
             setMovie(res.data)
         })
     }, [])
-    return (
+    return movie.length != 0 ? (
         <div className="FlipCard">
             <div className="FlipCard-Inner">
                 <div className="FlipCard-Front">
@@ -26,7 +27,11 @@ function FlipCard(props) {
                 </div>
             </div>
         </div>
-    );
+    ) : (
+        <div>
+            <Skeleton className="FlipCard" variant="rectangular" width={190} height={300} />
+        </div>
+    )
 }
 
 export default FlipCard;
