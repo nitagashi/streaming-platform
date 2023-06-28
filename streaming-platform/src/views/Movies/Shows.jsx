@@ -1,6 +1,7 @@
 import { Pagination, Skeleton } from '@mui/material';
 import SkeletonLoader from 'components/Loader/SkeletonLoader';
 import React, { useEffect, useState } from 'react'
+import LazyLoad from 'react-lazy-load';
 import { useNavigate } from 'react-router-dom';
 import MovieService from 'services/MovieServices';
 
@@ -19,9 +20,12 @@ function Shows() {
     }, [])
     useEffect(() => {
         setShows([])
-        MovieService.getMovies(page).then((res) => {
-            setShows(res.data.results);
-        })
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => {
+            MovieService.getMovies(page).then((res) => {
+                setShows(res.data.results);
+            })
+        }, 1000);
     }, [page])
     const handleChange = (event, value) => {
         setPage(value);
@@ -36,16 +40,18 @@ function Shows() {
                     shows.length != 0 ? (
                         shows.map((show) => {
                             return (
-                                <div onClick={() => { navigate(`/MovieShow/${show.id}`) }} className="ShowCard">
-                                    <img className="ShowCard-Image" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} />
-                                    <div className="ShowCard-Title">
-                                        {show.title}
+                                <LazyLoad height={"100%"} width={190} threshold={0.25}>
+                                    <div onClick={() => { navigate(`/MovieShow/${show.id}`) }} className="ShowCard">
+                                        <img className="ShowCard-Image" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} />
+                                        <div className="ShowCard-Title">
+                                            {show.title}
+                                        </div>
                                     </div>
-                                </div>
+                                </LazyLoad>
                             )
                         })
-                    ):(
-                        <SkeletonLoader number={20} width={190} height={270}/>
+                    ) : (
+                        <SkeletonLoader number={20} width={190} height={270} />
                     )
                 }
             </div>
