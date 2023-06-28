@@ -9,6 +9,7 @@ button {
     background-color: $RubyPlex-DarkBlue;
     height: 4em;
     flex-wrap: wrap;
+    gap: 2em;
 
     &-list {
         margin-left: 1em;
@@ -93,5 +94,9 @@ button {
                 color: $RubyPlex-LightRed;
             }
         }
+    }
+    &-Search{
+        margin-left: auto;
+        margin-right: 1em;
     }
 }

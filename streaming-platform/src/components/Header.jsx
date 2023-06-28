@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Search from './Search';
 
 function Header() {
     const [currentLink, setCurrentLink] = useState("");
@@ -24,6 +25,9 @@ function Header() {
                         return <button className={checkPage(link.route) ? 'Header-list__btn active' : 'Header-list__btn'}><Link to={link.route} ><p name={link.name}>{link.name}</p></Link></button>
                     })
                 }
+            <div className='Header-Search'>
+                <Search />
+            </div>
             </div>
         </header>
     );
