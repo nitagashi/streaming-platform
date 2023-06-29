@@ -23,6 +23,9 @@ class seriesService{
     async getTopRated(){
         return axios.get(`${ApiUrl}/tv/top_rated?api_key=${ApiKey}`)
     }
+    async search(query, page){
+        return axios.get(`${ApiUrl}/search/multi?api_key=${ApiKey}&query=${query}&page=${page}`)
+    }
 }
 const SeriesService = new seriesService();
 export default SeriesService;

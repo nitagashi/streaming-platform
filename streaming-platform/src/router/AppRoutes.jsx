@@ -8,6 +8,7 @@ import SerieVideo from 'views/Series/SerieVideo';
 import ShowVideo from 'views/Series/SerieVideo';
 import Series from 'views/Series/Series';
 import Shows from 'views/Movies/Shows';
+import SearchPage from 'views/SearchPage';
 
 function AppRoutes() {
     return (
@@ -19,6 +20,7 @@ function AppRoutes() {
             <Route exact path='/MovieShow/:id' Component={MovieShow} />
             <Route exact path='/SerieVideo/:idSerie/:seasonNr/:epNumber' Component={SerieVideo} />
             <Route exact path='/MovieVideo/:id' Component={MovieVideo} />
+            <Route exact path='/Search/:value' Component={SearchPage} />
             {/* <Route exact path='/Movie/:id' Component={SerieShow} /> */}
         </Routes>
     );
