@@ -6,8 +6,10 @@ function Search() {
     const [value, setValue] = useState('');
     const navigate = useNavigate();
     const handleSubmit = () => {
-        if(value != '')
+        if(value != ''){
             navigate(`/Search/${value}`);
+            setValue('')
+        }
     }
     return (
         <div className="Search">

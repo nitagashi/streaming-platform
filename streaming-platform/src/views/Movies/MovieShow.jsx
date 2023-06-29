@@ -12,10 +12,9 @@ function MovieShow() {
     const navigate = useNavigate();
     const { id } = params;
     useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         MovieService.getMovieById(params.id).then((res) => {
-            console.log(res.data);
             setShow(res.data)
-            console.log(res.data);
         })
         fetchMovie();
     }, [])

@@ -15,6 +15,7 @@ function SerieShow() {
     const navigate = useNavigate();
     const { id } = params;
     useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         SeriesService.getSerieById(id).then((res) => {
             console.log(res.data);
             setShow(res.data)
@@ -24,6 +25,7 @@ function SerieShow() {
     }, [])
     const fetchEpisodes = (seasonNr) => {
         setSeason([])
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         SeriesService.getSerieEpisodes(params.id, seasonNr).then((res) => {
             setTimeout(() => {
                 setSeason(res.data)
