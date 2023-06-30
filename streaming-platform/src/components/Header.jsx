@@ -5,8 +5,9 @@ import MobileHeader from './Layout/MobileHeader';
 
 function Header() {
     const [currentLink, setCurrentLink] = useState("");
-    const [width, setWidth] = useState("");
+    const [width, setWidth] = useState(window.innerWidth);
     const route = useLocation();
+    const navigate = useNavigate();
     const links = [
         { name: "Home", route: "/" },
         { name: "Movie", route: "/Shows" },
@@ -19,7 +20,6 @@ function Header() {
         window.addEventListener('resize', handleResize);
     }, [])
     const checkPage = (name) => {
-        console.log(route.pathname.toLocaleLowerCase() == name.toLocaleLowerCase());
         if (route.pathname.toLocaleLowerCase() == name.toLocaleLowerCase())
             return true;
         return false;
@@ -31,7 +31,7 @@ function Header() {
                     width <= 800 ?
                         <MobileHeader paths={links} /> : ''
                 }
-                <img className='Header-list__logo' src={require('images/logo.png')} alt='logo' />
+                <img className='Header-list__logo' onClick={() => {navigate("/")}} src={require('images/logo.png')} alt='logo' />
                 {
                     width > 800 ?
                         links.map((link) => {
