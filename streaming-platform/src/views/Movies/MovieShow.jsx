@@ -41,7 +41,7 @@ function MovieShow() {
                     </div>
                 </div>
                 <div className="Show-Description-Section">
-                    <p className="Show-Description-Section__Title">{show.original_title}</p>
+                    <p className="Show-Description-Section-Titles__Title">{show.original_title}</p>
                     <div className="Show-Description-Section__Genres">
                         {
                             show.genres != null ? show.genres.map((genre) => {

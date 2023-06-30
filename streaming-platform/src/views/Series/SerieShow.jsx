@@ -17,7 +17,6 @@ function SerieShow() {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         SeriesService.getSerieById(id).then((res) => {
-            console.log(res.data);
             setShow(res.data)
         })
         fetchEpisodes(currentSeason);
@@ -44,14 +43,23 @@ function SerieShow() {
             <div className='Show-Description'>
                 <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
                 <div className="Show-ImageContainer">
-                    <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${season.poster_path}`} alt="Show Backdrop" />
+                    {
+                        season.length != 0 ?
+                            <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${season.poster_path}`} alt="Show Backdrop" />
+                            :
+                            <Skeleton className="Show-ImageContainer__Img" variant="rectangular" width={240} height={360} />
+                    }
                     <div>
                         <StarsRating onChange={handleStarChange} />
                     </div>
                 </div>
                 <div className='Show-Description-Sections'>
                     <div className="Show-Description-Section">
-                        <p className="Show-Description-Section__Title">{season.name}</p>
+                        <div className="Show-Description-Section-Titles">
+                            <p className="Show-Description-Section-Titles__Title">{show.name}</p>
+                            <p className="Show-Description-Section-Titles__Title"> - </p>
+                            <p className="Show-Description-Section-Titles__Title">{season && season.name}</p>
+                        </div>
                         <div className="Show-Description-Section__Genres">
                             {
                                 show.genres != null ? show.genres.map((genre) => {
@@ -89,7 +97,7 @@ function SerieShow() {
                                     return ''
                             }) : '')
                             : (
-                                <SkeletonLoader number={20} width={275} height={200}/>
+                                <SkeletonLoader number={20} width={275} height={200} />
                             )
                     }
                 </div>

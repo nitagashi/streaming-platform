@@ -55,14 +55,16 @@
             gap: 0.5em;
             color: $RubyPlex-White;
             border-radius: 0.25rem;
-
-            &__Title {
-                font-size: 1.75rem;
-                margin: 0 !important;
-                margin-bottom: 1em;
-                font-weight: 700;
+            &-Titles{
+                display: flex;
+                &__Title {
+                    font-size: 1.75rem;
+                    margin: 0 !important;
+                    margin-bottom: 1em;
+                    font-weight: 700;
+                }
             }
-
+            
             &__Genres {
                 display: flex;
                 gap: 0.5em;
@@ -172,7 +174,7 @@
     }
     &-Pagination{
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
       padding: 1em;
       background-color: $RubyPlex-LightBlue;
       color: $RubyPlex-White;

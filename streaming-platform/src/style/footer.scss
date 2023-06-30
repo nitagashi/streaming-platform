@@ -16,7 +16,11 @@
 
     &-Content {
         flex: 1;
-        margin-right: 30px;
+        margin: 1em 2em;
+        min-width: 180px;
+        @include respond-to('l-mobile'){
+            width: 100%;
+        }
     }
 
     &-CopyRight {
