@@ -6,10 +6,11 @@ import SeriesService from 'services/SeriesServices';
 import EpisodeCard from './EpisodeCard';
 import StarsRating from 'components/Pixi/StarsRating';
 import SkeletonLoader from 'components/Loader/SkeletonLoader';
+import { Season, ShowInfo, ShowModel } from 'models/Models.types';
 
 function SerieShow() {
-    const [show, setShow] = useState([]);
-    const [season, setSeason] = useState([]);
+    const [show, setShow] = useState<ShowModel>(new ShowModel());
+    const [season, setSeason] = useState<Season>(new Season());
     const [currentSeason, setCurrentSeason] = useState(1);
     const params = useParams();
     const navigate = useNavigate();
@@ -22,8 +23,8 @@ function SerieShow() {
         fetchEpisodes(currentSeason);
         // eslint-disable-next-line
     }, [])
-    const fetchEpisodes = (seasonNr) => {
-        setSeason([])
+    const fetchEpisodes = (seasonNr: number) => {
+        setSeason(new Season())
         window.scrollTo({ top: 0, behavior: 'smooth' });
         SeriesService.getSerieEpisodes(params.id, seasonNr).then((res) => {
             setTimeout(() => {
@@ -32,19 +33,19 @@ function SerieShow() {
             }, 500);
         })
     }
-    const getPercentage = (percentage) => {
+    const getPercentage = (percentage: number) => {
         return Math.round(percentage * 10)
     }
-    const handleStarChange = (value) => {
+    const handleStarChange = (value: number) => {
         console.log(value);
     }
     return (
         <div className="Show">
             <div className='Show-Description'>
-                <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
+                <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.banner}`}></img>
                 <div className="Show-ImageContainer">
                     {
-                        season.length != 0 ?
+                        season ?
                             <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${season.poster_path}`} alt="Show Backdrop" />
                             :
                             <Skeleton className="Show-ImageContainer__Img" variant="rectangular" width={240} height={360} />
@@ -58,7 +59,7 @@ function SerieShow() {
                         <div className="Show-Description-Section-Titles">
                             <p className="Show-Description-Section-Titles__Title">{show.name}</p>
                             <p className="Show-Description-Section-Titles__Title"> - </p>
-                            <p className="Show-Description-Section-Titles__Title">{season && season.name}</p>
+                            <p className="Show-Description-Section-Titles__Title">{season.name}</p>
                         </div>
                         <div className="Show-Description-Section__Genres">
                             {
@@ -68,13 +69,13 @@ function SerieShow() {
                                     : ''
                             }
                         </div>
-                        <CircularProgress percentage={getPercentage(show.vote_average)} />
+                        {/* <CircularProgress percentage={getPercentage(show.vote_average)} /> */}
                     </div>
                     <div className="Show-Description-Section">
                         <div>
                             <b>Description:</b><br />
                         </div>
-                        {show.overview}
+                        {show.description}
                     </div>
                 </div>
             </div>
@@ -88,13 +89,11 @@ function SerieShow() {
                     {
                         season.episodes && season.episodes.length != 0 ? (
                             season.episodes != null ? season.episodes.map((episode) => {
-                                if (episode.air_date != null)
                                     return (
-                                        <div onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.episode_number}`)}>
+                                        <div onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.number}`)}>
                                             <EpisodeCard episode={episode} />
                                         </div>)
-                                else
-                                    return ''
+
                             }) : '')
                             : (
                                 <SkeletonLoader number={20} width={275} height={200} />

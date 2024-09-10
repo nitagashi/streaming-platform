@@ -19,7 +19,7 @@ function Header() {
         };
         window.addEventListener('resize', handleResize);
     }, [])
-    const checkPage = (name) => {
+    const checkPage = (name: string) => {
         if (route.pathname.toLocaleLowerCase() == name.toLocaleLowerCase())
             return true;
         return false;
@@ -35,7 +35,7 @@ function Header() {
                 {
                     width > 800 ?
                         links.map((link) => {
-                            return <button className={checkPage(link.route) ? 'Header-list__btn active' : 'Header-list__btn'}><Link to={link.route} ><p name={link.name}>{link.name}</p></Link></button>
+                            return <button className={checkPage(link.route) ? 'Header-list__btn active' : 'Header-list__btn'}><Link to={link.route} ><p>{link.name}</p></Link></button>
                         }) : ''
                 }
                 <div className='Header-Search'>

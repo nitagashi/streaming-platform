@@ -1,12 +1,13 @@
 import { Pagination, Skeleton } from '@mui/material';
 import SkeletonLoader from 'components/Loader/SkeletonLoader';
+import { ShowModel } from 'models/Models.types';
 import React, { useEffect, useState } from 'react'
 import LazyLoad from 'react-lazy-load';
 import { useNavigate } from 'react-router-dom';
 import SeriesService from 'services/SeriesServices';
 
 function Series() {
-    const [shows, setShows] = useState([]);
+    const [shows, setShows] = useState([new ShowModel()]);
     const [page, setPage] = useState(1);
     const [pageNr, setPageNr] = useState(1);
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ function Series() {
         })
     }, [])
     useEffect(() => {
-        setShows([])
+        setShows([new ShowModel()])
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => {
             SeriesService.getSeries(page).then((res) => {
@@ -26,7 +27,7 @@ function Series() {
             })
         }, 1000)
     }, [page])
-    const handleChange = (event, value) => {
+    const handleChange = (event: any, value: number) => {
         setPage(value);
     };
     return shows != null ? (
@@ -41,7 +42,7 @@ function Series() {
                             return (
                                 <LazyLoad height={"100%"} width={190} threshold={0.25}>
                                     <div onClick={() => { navigate(`/SerieShow/${show.id}`) }} className="ShowCard">
-                                        <img className="ShowCard-Image" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} />
+                                        <img className="ShowCard-Image" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.banner}`} />
                                         <div className="ShowCard-Title">
                                             {show.name}
                                         </div>
