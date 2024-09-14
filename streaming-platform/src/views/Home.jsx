@@ -3,25 +3,20 @@ import MovieService from 'services/MovieServices';
 import FlipCard from 'components/Movies/FlipCard';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import SeriesService from 'services/SeriesServices';
 import SerieCard from 'components/Series/SerieCard';
 import { Link } from 'react-router-dom';
+import { ShowModel } from 'models/Models.types';
+import CreateShow from 'views/Admin/CreateShow';
+import { useGetShowsQuery } from 'generated/graphql';
+
 
 function Home() {
-    const [movies, setMovies] = useState([]);
-    const [series, setSeries] = useState([]);
-    const [topRatesSeries, setTopRatesSeries] = useState([]);
-    useEffect(() => {
-        MovieService.getTrendingMovies().then((res) => {
-            setMovies(res.data.results)
-        })
-        SeriesService.getTrendingSeries().then((res) => {
-            setSeries(res.data.results)
-        })
-        SeriesService.getTopRated().then((res) => {
-            setTopRatesSeries(res.data.results)
-        })
-    }, [])
+    
+    const { loading, error, data } = useGetShowsQuery();
+    console.log(data)
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+    const { shows } = data
 
     const responsive = {
         extraSuperLargeDesktop: {
@@ -98,14 +93,14 @@ function Home() {
                     Start Binge-Watching Today!
                 </p>
                 <div className='Home-Banner__Buttons'>
-                    <a href="#movies">
+                    <a href="#series">
                         <button className='RubyButton'>
                             Watch Now.
                         </button>
                     </a>
                 </div>
             </div>
-            <div id="movies" className='Home-LatestMovie'>
+            {/* <div id="movies" className='Home-LatestMovie'>
                 <div className='Home-LatestMovie-Title'>
                     <p>Trending Movies</p>
                 </div>
@@ -125,17 +120,18 @@ function Home() {
                     className='Home-LatestMovie__Carousel'
                 >
                     {
-                        movies.map((movie) => {
+                        shows.map((show) => {
                             return (
-                                <Link to={"/MovieShow/" + movie.id}>
-                                    <FlipCard id={movie.id} key={movie.id} />
+                                <Link to={"/MovieShow/" + show.id}>
+                                    <FlipCard id={show.id} loading={loading} key={show.id} />
                                 </Link>
                             )
                         })
                     }
                 </Carousel>
-            </div>
-            <div className='Home-LatestMovie SeriesCardCarousel'>
+            </div> */}
+            <CreateShow  />
+            <div className='Home-LatestMovie SeriesCardCarousel'  id="series">
                 <div className='Home-LatestMovie-Title'>
                     <p>Trending Series</p>
                 </div>
@@ -155,10 +151,10 @@ function Home() {
                     className='Home-LatestMovie__Carousel'
                 >
                     {
-                        series.map((serie) => {
+                        shows.map((show) => {
                             return (
-                                <Link to={"/SerieShow/" + serie.id}>
-                                    <SerieCard id={serie.id} key={serie.id} />
+                                <Link to={"/SerieShow/" + show.id}>
+                                    <SerieCard id={show.id} loading={loading} show={show} key={show.id} />
                                 </Link>
                             )
                         })
@@ -185,10 +181,10 @@ function Home() {
                     className='Home-LatestMovie__Carousel'
                 >
                     {
-                        topRatesSeries.map((topRatesSerie) => {
+                        shows.map((topRatesSerie) => {
                             return (
                                 <Link to={"/SerieShow/" + topRatesSerie.id}>
-                                    <SerieCard id={topRatesSerie.id} key={topRatesSerie.id} />
+                                    <SerieCard id={topRatesSerie.id} show={topRatesSerie} key={topRatesSerie.id} />
                                 </Link>
                             )
                         })

@@ -5,32 +5,37 @@ import React, { useEffect, useState } from 'react'
 import LazyLoad from 'react-lazy-load';
 import { useNavigate } from 'react-router-dom';
 import SeriesService from 'services/SeriesServices';
+import { useQuery } from '@apollo/client';
+import { useGetShowsQuery } from 'generated/graphql';
+
+
+interface Shows {
+    shows: ShowModel[]
+}
 
 function Series() {
-    const [shows, setShows] = useState([new ShowModel()]);
     const [page, setPage] = useState(1);
     const [pageNr, setPageNr] = useState(1);
     const navigate = useNavigate();
-    useEffect(() => {
-        SeriesService.getSeries(page).then((res) => {
-            console.log(res.data);
-            setPageNr(res.data.total_pages)
-            setShows(res.data.results);
-        })
-    }, [])
-    useEffect(() => {
-        setShows([new ShowModel()])
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => {
-            SeriesService.getSeries(page).then((res) => {
-                setShows(res.data.results);
-            })
-        }, 1000)
-    }, [page])
+    // useEffect(() => {
+    //     setShows([new ShowModel()])
+    //     window.scrollTo({ top: 0, behavior: 'smooth' });
+    //     setTimeout(() => {
+    //         SeriesService.getSeries(page).then((res) => {
+    //             setShows(res.data.results);
+    //         })
+    //     }, 1000)
+    // }, [page])
+
+    const { loading, error, data = { shows: [new ShowModel()] } } = useGetShowsQuery();
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+    const { shows } = data
+
     const handleChange = (event: any, value: number) => {
         setPage(value);
     };
-    return shows != null ? (
+    return (
         <div className='Shows'>
             <div className='Shows-Header'>
                 <div>Series</div>
@@ -39,6 +44,8 @@ function Series() {
                 {
                     shows.length != 0 ? (
                         shows.map((show) => {
+                            { console.log(show) }
+
                             return (
                                 <LazyLoad height={"100%"} width={190} threshold={0.25}>
                                     <div onClick={() => { navigate(`/SerieShow/${show.id}`) }} className="ShowCard">
@@ -60,7 +67,7 @@ function Series() {
                 <Pagination page={page} onChange={handleChange} count={pageNr} />
             </div>
         </div>
-    ) : (<div>Loading...</div>)
+    )
 }
 
 export default Series;

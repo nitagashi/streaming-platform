@@ -1,0 +1,68 @@
+datasource db {
+  provider = "mysql" // or your preferred DB (MySQL, SQLite, etc.)
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Subtitles {
+  id        Int     @id @default(autoincrement())
+  language  String
+  path      String
+  episode   Episode @relation(fields: [episodeId], references: [id])
+  episodeId Int
+}
+
+model Episode {
+  id            Int         @id @default(autoincrement())
+  name          String
+  description   String
+  number        Int
+  path          String
+  image         String
+  subtitlePaths Subtitles[]
+
+  showId   Int
+  show     Show    @relation(fields: [showId], references: [id])
+  Season   Season? @relation(fields: [seasonId], references: [id])
+  seasonId Int?
+}
+
+model Genre {
+  id    Int         @id @default(autoincrement())
+  name  String
+  shows ShowGenre[]
+}
+
+model Show {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String
+  image       String
+  banner      String
+  episodes    Episode[]
+  genres      ShowGenre[]
+  seasons     Season[]
+}
+
+model ShowGenre {
+  showId  Int
+  genreId Int
+  show    Show  @relation(fields: [showId], references: [id])
+  genre   Genre @relation(fields: [genreId], references: [id])
+
+  @@id([showId, genreId])
+}
+
+model Season {
+  id            Int       @id @default(autoincrement())
+  name          String
+  poster_path   String
+  season_number Int
+  is_set        Boolean
+  episodes      Episode[]
+  showId        Int
+  show          Show      @relation(fields: [showId], references: [id])
+}

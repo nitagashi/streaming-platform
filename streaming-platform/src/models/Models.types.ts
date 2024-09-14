@@ -7,7 +7,7 @@ export class EpisodeModel {
         public number: number = 0,
         public path: string = '',
         public image: string = '',
-        public subtitlePath: Array<Subtitles> = []
+        // public subtitlePath: Array<Subtitles> = []
     ) { }
 
     // getEpisodeInfo(): string {

@@ -1,0 +1,52 @@
+
+query GetShows {
+  shows {
+    id
+    name
+    description
+    stars
+    banner
+    episodes {
+      id
+      name
+    }
+  }
+}
+
+query GetShowById($id: ID!) {
+  show(id: $id) {
+    id
+    name
+    description
+    stars
+    banner
+    image
+    episodes {
+      id
+      name
+    }
+    genres {
+      id
+      name
+    }
+    seasons {
+      id
+      name
+      season_number
+      episodes {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation CreateShow($input: ShowInput!) {
+  createShow(input: $input) {
+    id
+    name
+    description
+    image
+    banner
+  }
+}

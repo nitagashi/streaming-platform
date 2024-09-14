@@ -1,2 +1,6 @@
-streaming-platform/.env
 streaming-platform-api/node_modules
+assets/node_modules
+assets/credentials/test-privateKey.key
+assets/credentials/test.crt
+assets/public/uploads/
+streaming-platform/src/generated/

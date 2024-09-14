@@ -10,7 +10,7 @@ function Header() {
     const navigate = useNavigate();
     const links = [
         { name: "Home", route: "/" },
-        { name: "Movie", route: "/Shows" },
+        // { name: "Movie", route: "/Shows" },
         { name: "Series", route: "/Series" }
     ]
     useEffect(() => {

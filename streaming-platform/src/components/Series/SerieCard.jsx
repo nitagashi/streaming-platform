@@ -4,19 +4,19 @@ import LazyLoad from 'react-lazy-load';
 import SeriesService from 'services/SeriesServices';
 
 function SerieCard(props) {
-    const { id } = props;
-    const [serie, setSerie] = useState([]);
+    const { id, show, loading } = props;
+    // const [serie, setSerie] = useState([]);
 
-    useEffect(() => {
-        SeriesService.getSerieById(id).then((res) => {
-            setSerie(res.data)
-        })
-    }, [])
-    return serie.length != 0 ? (
-        <LazyLoad  height={"100%"} width={275} threshold={0.25}>
+    // useEffect(() => {
+    //     SeriesService.getSerieById(id).then((res) => {
+    //         setSerie(res.data)
+    //     })
+    // }, [])
+    return !loading ? (
+        <LazyLoad height={"100%"} width={275} threshold={0.25}>
             <div className='SerieCard'>
-                <img className="SerieCard__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${serie.backdrop_path}`} />
-                <div className="SerieCard__Title">{serie.name}</div>
+                <img className="SerieCard__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`} />
+                <div className="SerieCard__Title">{show.name}</div>
             </div>
         </LazyLoad>
     ) : (
