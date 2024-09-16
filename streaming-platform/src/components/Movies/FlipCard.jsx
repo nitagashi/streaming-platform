@@ -4,27 +4,21 @@ import LazyLoad from 'react-lazy-load';
 import MovieService from 'services/MovieServices';
 
 function FlipCard(props) {
-    const { id } = props;
-    const [movie, setMovie] = useState([]);
-
-    useEffect(() => {
-        MovieService.getMovieById(id).then((res) => {
-            setMovie(res.data)
-        })
-    }, [])
+    const { id, movie } = props;
+    console.log(movie)
     return movie.length != 0 ? (
         <LazyLoad height={"100%"} width={190} threshold={0.25}>
             <div className="FlipCard">
                 <div className="FlipCard-Inner">
                     <div className="FlipCard-Front">
                         <div className="FlipCard-Front-Content">
-                            <img className="FlipCard-Front-Content__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${movie.poster_path}`} />
-                            <p className="FlipCard-Front-Content__Title">{movie.original_title}</p>
+                            <img className="FlipCard-Front-Content__Img" src={`${process.env.REACT_APP_ASSETS_URL}/${movie.image}`} />
+                            <p className="FlipCard-Front-Content__Title">{movie.name}</p>
                         </div>
                     </div>
                     <div className="FlipCard-Back">
-                        <img className="FlipCard-Back__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${movie.poster_path}`} />
-                        <p className="FlipCard-Back__Title">{movie.original_title}</p>
+                        <img className="FlipCard-Back__Img" src={`${process.env.REACT_APP_ASSETS_URL}/${movie.image}`} />
+                        <p className="FlipCard-Back__Title">{movie.name}</p>
                         <p className="FlipCard-Back__Description">{movie.overview}</p>
                     </div>
                 </div>

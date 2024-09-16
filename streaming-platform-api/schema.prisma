@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mysql" // or your preferred DB (MySQL, SQLite, etc.)
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -24,8 +24,6 @@ model Episode {
   image         String
   subtitlePaths Subtitles[]
 
-  showId   Int
-  show     Show    @relation(fields: [showId], references: [id])
   Season   Season? @relation(fields: [seasonId], references: [id])
   seasonId Int?
 }
@@ -42,7 +40,6 @@ model Show {
   description String
   image       String
   banner      String
-  episodes    Episode[]
   genres      ShowGenre[]
   seasons     Season[]
 }

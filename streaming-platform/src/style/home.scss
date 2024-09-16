@@ -112,6 +112,11 @@
         &-Title{
             background-color: $RubyPlex-LightBlue;
             width: 100%;
+            display: flex;
+            align-items: center;
+            & .IconButton{
+                margin-left: auto;
+            }
             & > p{
                     margin: 0;
                     font-size: 20pt;

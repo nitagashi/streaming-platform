@@ -11,19 +11,19 @@ function MovieShow() {
     const params = useParams();
     const navigate = useNavigate();
     const { id } = params;
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        MovieService.getMovieById(params.id).then((res) => {
-            setShow(res.data)
-        })
-        fetchMovie();
-    }, [])
-    const fetchMovie = () => {
-        MovieService.getMovieVideo(params.id).then((res) => {
-            console.log(res.data);
-            setVideo(res.data)
-        })
-    }
+    // useEffect(() => {
+    //     window.scrollTo({ top: 0, behavior: 'smooth' });
+    //     MovieService.getMovieById(params.id).then((res) => {
+    //         setShow(res.data)
+    //     })
+    //     fetchMovie();
+    // }, [])
+    // const fetchMovie = () => {
+    //     MovieService.getMovieVideo(params.id).then((res) => {
+    //         console.log(res.data);
+    //         setVideo(res.data)
+    //     })
+    // }
     const getPercentage = (percentage) => {
         return Math.round(percentage * 10)
     }
@@ -33,15 +33,15 @@ function MovieShow() {
     return show != null ? (
         <div className="Show">
             <div className='Show-Description'>
-                <img className="Show-Banner Movie-Poster" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.backdrop_path}`}></img>
+                <img className="Show-Banner Movie-Poster" src={`${process.env.REACT_APP_ASSETS_URL}/${show.banner}`}></img>
                 <div className="Show-ImageContainer">
-                    <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} alt="Show Backdrop" />
+                    <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_ASSETS_URL}/${show.banner}`} alt="Show Backdrop" />
                     <div>
                         <StarsRating onChange={handleStarChange}/>
                     </div>
                 </div>
                 <div className="Show-Description-Section">
-                    <p className="Show-Description-Section-Titles__Title">{show.original_title}</p>
+                    <p className="Show-Description-Section-Titles__Title">{show.name}</p>
                     <div className="Show-Description-Section__Genres">
                         {
                             show.genres != null ? show.genres.map((genre) => {

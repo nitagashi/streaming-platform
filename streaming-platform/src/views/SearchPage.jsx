@@ -68,14 +68,14 @@ function SearchPage(props) {
                                     {
                                         show.media_type == "movie" ? (
                                             <div onClick={() => { navigate(`/MovieShow/${show.id}`) }} className="ShowCard">
-                                                <img className="ShowCard-Image" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} />
+                                                <img className="ShowCard-Image" src={`${process.env.REACT_APP_ASSETS_URL}${show.image}`} />
                                                 <div className="ShowCard-Title">
                                                     {show.title}
                                                 </div>
                                             </div>
                                         ) : (
                                             <div onClick={() => { navigate(`/SerieShow/${show.id}`) }} className="ShowCard">
-                                                <img className="ShowCard-Image" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.poster_path}`} />
+                                                <img className="ShowCard-Image" src={`${process.env.REACT_APP_ASSETS_URL}${show.image}`} />
                                                 <div className="ShowCard-Title">
                                                     {show.name}
                                                 </div>

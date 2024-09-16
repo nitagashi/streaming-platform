@@ -33,11 +33,12 @@ app.post('/upload/:path', upload.single('image'), (req, res) => {
     return res.status(400).json({ status: false, fileName: "" });
   }
   //Move the img in the path
-  const imagePath = `public/uploads/${path}/${req.file.filename}`;
-  fs.renameSync(req.file.path, imagePath);
+  const imagePath = `${path}/${req.file.filename}`
+  const fullPath = `public/uploads/${path}/${req.file.filename}`;
+  fs.renameSync(req.file.path, fullPath);
 
   const fileName = req.file.filename;
-  return res.json({ status: true, fileName: fileName });
+  return res.json({ status: true, fileName: imagePath });
 });
 
 // Define a route to delete an image by its name

@@ -45,12 +45,13 @@ const typeDefs = gql`
     poster_path: String
     season_number: Int
     is_set: Boolean
-    episodes: [Episode!]
+    episodes: [Episode!]!
   }
 
   type Query {
     shows: [Show!]!
     show(id: ID!): Show
+    season(id: ID!): [Season!]
   }
   input ShowInput {
     name: String!
@@ -70,14 +71,23 @@ const resolvers = {
   Query: {
     shows: async () => {
       return prisma.show.findMany({
-        include: { episodes: true, genres: true, seasons: true },
+        include: { seasons: true },
       });
     },
     show: async (_, args) => {
       return prisma.show.findUnique({
         where: { id: Number(args.id) },
-        include: { episodes: true, genres: true, seasons: true },
+        include: { genres: true, seasons: true },
       });
+    },
+    season: async (_, args) => {
+      console.log('Fetching season with ID:', args.id);
+      const seasons = await prisma.season.findMany({
+        where: { showId: Number(args.id) },
+        include: { episodes: true },
+      });
+      console.log('Fetched seasons:', seasons);
+      return seasons;
     },
   },
   Mutation: {
@@ -94,9 +104,9 @@ const resolvers = {
           name: args.name,
           description: args.description,
           number: args.number,
-          show: {
-            connect: { id: Number(args.showId) },
-          },
+          // show: {
+          //   connect: { id: Number(args.showId) },
+          // },
         },
       });
     },

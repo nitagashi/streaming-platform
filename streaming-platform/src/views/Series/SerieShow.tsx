@@ -6,9 +6,9 @@ import SeriesService from 'services/SeriesServices';
 import EpisodeCard from './EpisodeCard';
 import StarsRating from 'components/Pixi/StarsRating';
 import SkeletonLoader from 'components/Loader/SkeletonLoader';
-import { Season, ShowInfo, ShowModel } from 'models/Models.types';
+import { EpisodeModel, ShowInfo, ShowModel } from 'models/Models.types';
 import { useQuery } from '@apollo/client';
-import { useGetShowByIdQuery } from 'generated/graphql';
+import { Episode, type Season, useGetSeasonByShowQuery, useGetSeasonByShowSuspenseQuery, useGetShowByIdQuery } from 'generated/graphql';
 
 interface Show {
     show: ShowModel
@@ -16,7 +16,7 @@ interface Show {
 
 function SerieShow() {
     // const [show, setShow] = useState<ShowModel>(new ShowModel());
-    const [season, setSeason] = useState<Season>(new Season());
+    // const [season, setSeason] = useState<Season>(new Season());
     const [currentSeason, setCurrentSeason] = useState(1);
     const params = useParams();
     const navigate = useNavigate();
@@ -25,22 +25,27 @@ function SerieShow() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [])
 
-    const { data = { show: new ShowModel() }, loading, error } = useGetShowByIdQuery({
+    const { data: showData, loading: loadingShow, error: errorShow } = useGetShowByIdQuery({
         variables: {
             id: id
         },
     });
 
-    // const { loading, error, data = { show: new ShowModel() } } = useGetShowByIdQuery<Show>(GET_SHOW_BY_ID_QUERY, {
-    //     variables: { id: id },
-    // });
+    const { data: seasonData, loading: loadingSeason, error: errorSeason } = useGetSeasonByShowQuery({
+        variables: {
+            id: id
+        },
+    });
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
-    console.log(data)
-    const { show } = data
+    const show = showData?.show;
+    const season = seasonData?.season;
 
-    if(!show) return <p>No show available</p>;
+    if (loadingShow || loadingSeason) return <p>Loading...</p>;
+    console.log(errorShow)
+    console.log(errorSeason)
+    // if (errorShow || errorSeason) return <p>Error</p>;
+
+    if (!show || !season) return <p>No show available</p>;
 
     const getPercentage = (percentage: number) => {
         return Math.round(percentage * 10)
@@ -51,11 +56,11 @@ function SerieShow() {
     return (
         <div className="Show">
             <div className='Show-Description'>
-                <img className="Show-Banner" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.banner}`}></img>
+                <img className="Show-Banner" src={`${process.env.REACT_APP_ASSETS_URL}/${show.banner}`}></img>
                 <div className="Show-ImageContainer">
                     {
                         season ?
-                            <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${season.poster_path}`} alt="Show Backdrop" />
+                            <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_ASSETS_URL}/${show.image}`} alt="Show Backdrop" />
                             :
                             <Skeleton className="Show-ImageContainer__Img" variant="rectangular" width={240} height={360} />
                     }
@@ -97,7 +102,7 @@ function SerieShow() {
                 <div className="Show-Season-Episodes">
                     {
                         season.episodes && season.episodes.length != 0 ? (
-                            season.episodes != null ? season.episodes.map((episode) => {
+                            season.episodes != null ? season.episodes.map((episode: Episode) => {
                                 return (
                                     <div onClick={() => navigate(`/SerieVideo/${id}/${season.season_number}/${episode.number}`)}>
                                         <EpisodeCard episode={episode} />

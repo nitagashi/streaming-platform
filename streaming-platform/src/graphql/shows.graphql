@@ -6,10 +6,7 @@ query GetShows {
     description
     stars
     banner
-    episodes {
-      id
-      name
-    }
+    image
   }
 }
 
@@ -37,6 +34,24 @@ query GetShowById($id: ID!) {
         id
         name
       }
+    }
+  }
+}
+
+query GetSeasonByShow($id: ID!) {
+  season(id: $id) {
+    id
+    name
+    poster_path
+    season_number
+    is_set
+    episodes {
+      id
+      name
+      description
+      number
+      path
+      image
     }
   }
 }

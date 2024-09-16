@@ -38,7 +38,7 @@ function Series() {
     return (
         <div className='Shows'>
             <div className='Shows-Header'>
-                <div>Series</div>
+                <div></div>
             </div>
             <div className='ShowCard-Container'>
                 {
@@ -49,7 +49,7 @@ function Series() {
                             return (
                                 <LazyLoad height={"100%"} width={190} threshold={0.25}>
                                     <div onClick={() => { navigate(`/SerieShow/${show.id}`) }} className="ShowCard">
-                                        <img className="ShowCard-Image" src={`${process.env.REACT_APP_API_MOVIEDB_IMAGE_URL}${show.banner}`} />
+                                        <img className="ShowCard-Image" src={`${process.env.REACT_APP_ASSETS_URL}/${show.banner}`} />
                                         <div className="ShowCard-Title">
                                             {show.name}
                                         </div>

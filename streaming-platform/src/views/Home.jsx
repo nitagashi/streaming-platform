@@ -9,9 +9,8 @@ import { ShowModel } from 'models/Models.types';
 import CreateShow from 'views/Admin/CreateShow';
 import { useGetShowsQuery } from 'generated/graphql';
 
-
 function Home() {
-    
+
     const { loading, error, data } = useGetShowsQuery();
     console.log(data)
     if (loading) return <p>Loading...</p>;
@@ -100,9 +99,12 @@ function Home() {
                     </a>
                 </div>
             </div>
-            {/* <div id="movies" className='Home-LatestMovie'>
+            <div id="movies" className='Home-LatestMovie'>
                 <div className='Home-LatestMovie-Title'>
                     <p>Trending Movies</p>
+                    <div className='IconButton'>
+                    <CreateShow />
+                    </div>
                 </div>
                 <Carousel
                     swipeable={true}
@@ -123,15 +125,14 @@ function Home() {
                         shows.map((show) => {
                             return (
                                 <Link to={"/MovieShow/" + show.id}>
-                                    <FlipCard id={show.id} loading={loading} key={show.id} />
+                                    <FlipCard id={show.id} movie={show} loading={loading} key={show.id} />
                                 </Link>
                             )
                         })
                     }
                 </Carousel>
-            </div> */}
-            <CreateShow  />
-            <div className='Home-LatestMovie SeriesCardCarousel'  id="series">
+            </div>
+            <div className='Home-LatestMovie SeriesCardCarousel' id="series">
                 <div className='Home-LatestMovie-Title'>
                     <p>Trending Series</p>
                 </div>
