@@ -1,5 +1,5 @@
 schema: http://localhost:4000/graphql
-documents: src/**/*.graphql           
+documents: src/**/*.graphql
 generates:
   src/generated/graphql.ts:
     plugins:
@@ -10,3 +10,8 @@ generates:
       withHooks: true
       withHOC: false
       withComponent: false
+      avoidOptionals: 
+        field: true        # Makes fields non-nullable if they are marked non-null in the schema
+        inputValue: true   # Makes input values non-nullable if they are marked non-null in the schema
+        defaultValue: true # Makes default values non-nullable
+        maybeValue: 'T'

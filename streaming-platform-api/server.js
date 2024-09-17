@@ -22,10 +22,9 @@ const typeDefs = gql`
     id: ID!
     name: String!
     description: String!
-    number: Int
+    number: Int!
     path: String
     image: String
-    subtitlePaths: [Subtitle!]
   }
 
   type Genre {
@@ -33,19 +32,14 @@ const typeDefs = gql`
     name: String!
   }
 
-  type Subtitle {
-    id: ID!
-    language: String!
-    path: String!
-  }
-
   type Season {
     id: ID!
     name: String!
     poster_path: String
-    season_number: Int
+    season_number: Int!
     is_set: Boolean
     episodes: [Episode!]!
+    showId: Int!
   }
 
   type Query {
@@ -53,6 +47,7 @@ const typeDefs = gql`
     show(id: ID!): Show
     season(id: ID!): [Season!]
   }
+  
   input ShowInput {
     name: String!
     description: String!
@@ -60,8 +55,26 @@ const typeDefs = gql`
     banner: String
   }
 
+  input EpisodeInput {
+    name: String!
+    description: String!
+    number: Int!
+    path: String
+    image: String
+  }
+
+  input SeasonInput {
+    name: String!
+    poster_path: String
+    season_number: Int!
+    is_set: Boolean
+    episodes: [EpisodeInput!]!
+    showId: Int!
+  }
+
   type Mutation {
     createShow(input:ShowInput!): Show!
+    createSeason(input:SeasonInput!): Season!
     addEpisode(showId: ID!, name: String!, description: String!, number: Int!): Episode!
   }
 `;
@@ -77,7 +90,7 @@ const resolvers = {
     show: async (_, args) => {
       return prisma.show.findUnique({
         where: { id: Number(args.id) },
-        include: { genres: true, seasons: true },
+        include: { genres: true },
       });
     },
     season: async (_, args) => {
@@ -92,21 +105,36 @@ const resolvers = {
   },
   Mutation: {
     createShow: async (_, data) => {
-      console.log(data)
       return prisma.show.create({
-        data: data.input
+        data: {
+          name: data.input
+        }
       });
     },
-
+    createSeason: async (_, data) => {
+      const { input } = data
+      console.log(input)
+      return prisma.season.create({
+        data: {
+          name: input.name,
+          poster_path: input.poster_path,
+          season_number: input.season_number,
+          showId: input.showId,
+          is_set: input.is_set,
+          episodes: {
+            create: [
+              ...input.episodes
+            ]
+          }
+        }
+      });
+    },
     addEpisode: async (_, args) => {
       return prisma.episode.create({
         data: {
           name: args.name,
           description: args.description,
           number: args.number,
-          // show: {
-          //   connect: { id: Number(args.showId) },
-          // },
         },
       });
     },

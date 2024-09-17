@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { ShowModel } from 'models/Models.types';
 import CreateShow from 'views/Admin/CreateShow';
 import { useGetShowsQuery } from 'generated/graphql';
+import CreateSeason from './Admin/CreateSeason';
 
 function Home() {
 
