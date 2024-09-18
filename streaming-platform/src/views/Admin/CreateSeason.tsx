@@ -14,7 +14,7 @@ import {
   StepLabel,
   IconButton,
 } from '@mui/material';
-import { useCreateSeasonMutation, GetSeasonByShowDocument, Season, Episode } from 'generated/graphql';
+import { useCreateSeasonMutation, GetSeasonByShowDocument } from 'generated/graphql';
 import InputFileUpload from 'components/Primary-components/FileUploader';
 import axios from 'axios';
 import { Add, Delete } from '@mui/icons-material';
@@ -25,8 +25,25 @@ interface P{
 
 interface FileUploader {
   path: string;
-  file: File;
+  file?: File;
   preview: string;
+}
+
+interface Season {
+  episodes: Array<Episode>,
+  is_set: boolean,
+  name: string,
+  poster_path: string,
+  season_number: number,
+  showId: number
+}
+
+interface Episode {
+  description: string,
+  name: string,
+  number: number,
+  image?: File,
+  path?: File
 }
 
 const CreateSeason = (props : P) => {
@@ -40,17 +57,15 @@ const CreateSeason = (props : P) => {
     poster_path: '',
     episodes: [],
   });
-  const [poster, setPoster] = useState<FileUploader>({ path: '', file: new File([''], 'filename'), preview: '' });
+  const [poster, setPoster] = useState<FileUploader>({ path: '', file: undefined, preview: '' });
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [episode, setEpisode] = useState<Episode>({
     name: '',
     description: '',
-    number: 1,
-    path: '',
-    image: '',
+    number: 1
   });
-  const [episodePoster, setEpisodePoster] = useState<FileUploader>({ path: '', file: new File([''], 'filename'), preview: '' });
-  const [episodeVideo, setEpisodeVideo] = useState<FileUploader>({ path: '', file: new File([''], 'filename'), preview: '' });
+  const [episodePoster, setEpisodePoster] = useState<FileUploader>({ path: '', file: undefined, preview: '' });
+  const [episodeVideo, setEpisodeVideo] = useState<FileUploader>({ path: '', file: undefined, preview: '' });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -74,13 +89,13 @@ const CreateSeason = (props : P) => {
   };
 
   const handleAddEpisode = () => {
-    setEpisodes([...episodes, { ...episode, image: episodePoster.preview, path: episodeVideo.preview }]);
+    setEpisodes([...episodes, { ...episode, image: episodePoster.file, path: episodeVideo.file }]);
     setEpisode({
       name: '',
       description: '',
       number: episode.number + 1,
-      path: '',
-      image: '',
+      path: undefined,
+      image: undefined,
     });
     setEpisodePoster({ path: '', file: new File([''], 'filename'), preview: '' });
     setEpisodeVideo({ path: '', file: new File([''], 'filename'), preview: '' });
@@ -93,45 +108,44 @@ const CreateSeason = (props : P) => {
 
   const handleSubmit = async (): Promise<void> => {
     try {
-      const posterFormData = new FormData();
-      posterFormData.append('image', poster.file);
-
-      const posterResponse = await axios.post(process.env.REACT_APP_ASSETS_URL + `/upload/posters`, posterFormData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
       const updatedEpisodes = await Promise.all(
         episodes.map(async (ep) => {
-          const posterFormData = new FormData();
-          posterFormData.append('image', ep.image);
-            console.log(ep.image)
-          const videoFormData = new FormData();
-          videoFormData.append('video', ep.path);
-  
-          const [posterResponse, videoResponse] = await Promise.all([
-            axios.post(process.env.REACT_APP_ASSETS_URL + `/upload/posters`, posterFormData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }),
-            axios.post(process.env.REACT_APP_ASSETS_URL + `/upload/episodeVideos`, videoFormData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }),
-          ]);
-  
-          return {
-            ...ep,
-            image: posterResponse.data.fileName,
-            path: videoResponse.data.fileName,
-          };
+          if(ep.image && ep.path){
+            const posterFormData = new FormData();
+            posterFormData.append('file', ep.image);
+              console.log(ep.image)
+              const videoFormData = new FormData();
+              videoFormData.append('file', ep.path);
+              
+              const [posterResponse, videoResponse] = await Promise.all([
+                axios.post(`${process.env.REACT_APP_ASSETS_URL}/upload/posters`, posterFormData, {
+                  headers: { 'Content-Type': 'multipart/form-data' },
+                }),
+                axios.post(`${process.env.REACT_APP_ASSETS_URL}/upload/episodeVideos`, videoFormData, {
+                  headers: { 'Content-Type': 'multipart/form-data' },
+                }),
+              ]);
+              return {
+                ...ep,
+                image: posterResponse.data.fileName,
+                path: videoResponse.data.fileName,
+              };
+          }
+          return ep
         })
       );
-      
-      const posterFileName = posterResponse.data.fileName;
+      let posterFileName = ''
+      if(poster.file){
+        const posterFormData = new FormData();
+        posterFormData.append('file', poster.file);
+  
+        const posterResponse = await axios.post(process.env.REACT_APP_ASSETS_URL + `/upload/posters`, posterFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        posterFileName = posterResponse.data.fileName;
+      }
       console.log(seasonData)
       const seasonInput = {
         ...seasonData,

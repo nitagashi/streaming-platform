@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const https = require('https');
-const port = 8080; // Choose an available port
+const port = 8080;
 const cors = require("cors");
 const multer = require('multer');
 const fs = require('fs');
@@ -11,50 +11,61 @@ app.use(cors());
 // Serve static files from the 'public' directory
 app.use(express.static('public/uploads'));
 
-app.get('/', (req, res) => {
-  res.send('')
-})
-
-// Initialize Multer for image uploads
+// Initialize Multer with dynamic destination for both images and videos
 const storage = multer.diskStorage({
-  destination: 'public/uploads', // Define the destination folder
-  filename: (req, file, callback) => {
-    // Generate a unique filename
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    callback(null, uniqueSuffix + '-' + file.originalname);
+  destination: (req, file, cb) => {
+    const path = req.params.path;
+    
+    // Dynamically set the destination folder based on the path
+    let folder = 'public/uploads';
+    if (path === 'posters') {
+      folder += '/images';
+    } else if (path === 'episodeVideos') {
+      folder += '/episodeVideos';
+    }
+    
+    // Ensure the directory exists
+    if (!fs.existsSync(folder)) {
+      fs.mkdirSync(folder, { recursive: true });
+    }
+    
+    cb(null, folder);
   },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+  }
 });
+
 const upload = multer({ storage });
 
-// Define an endpoint for image uploads
-app.post('/upload/:path', upload.single('image'), (req, res) => {
+// Define a generic upload endpoint for both images and videos
+app.post('/upload/:path', upload.single('file'), (req, res) => {
   const path = req.params.path;
-  console.log(req.file)
   if (!req.file) {
     return res.status(400).json({ status: false, fileName: "" });
   }
-  //Move the img in the path
-  const imagePath = `${path}/${req.file.filename}`
+  
+  // Construct the correct file path
+  const filePath = `${path}/${req.file.filename}`;
   const fullPath = `public/uploads/${path}/${req.file.filename}`;
-  console.log(imagePath)
   fs.renameSync(req.file.path, fullPath);
 
-  const fileName = req.file.filename;
-  return res.json({ status: true, fileName: imagePath });
+  return res.json({ status: true, fileName: filePath });
 });
 
-// Define a route to delete an image by its name
-app.delete('/images/:path/:imageName', (req, res) => {
-  const imageName = req.params.imageName;
-  var path = req.params.path;
-  const imagePath = `public/uploads/${path}/${imageName}`;
-  console.log(imagePath);
-  if (fs.existsSync(imagePath)) {
-    // Delete the image file
-    fs.unlinkSync(imagePath);
-    res.json({ message: 'Image deleted successfully' });
+// Define a route to delete a file by its name
+app.delete('/files/:path/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const path = req.params.path;
+  const filePath = `public/uploads/${path}/${fileName}`;
+  
+  if (fs.existsSync(filePath)) {
+    // Delete the file
+    fs.unlinkSync(filePath);
+    res.json({ message: 'File deleted successfully' });
   } else {
-    res.status(404).json({ message: 'Image not found' });
+    res.status(404).json({ message: 'File not found' });
   }
 });
 
@@ -66,5 +77,5 @@ const server = https.createServer(credentials, app);
 
 // Start the server
 server.listen(port, () => {
-  console.log(`Image server is running on https://localhost:${port}`);
+  console.log(`Server is running on https://localhost:${port}`);
 });

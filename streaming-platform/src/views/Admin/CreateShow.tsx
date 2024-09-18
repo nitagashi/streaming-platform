@@ -69,10 +69,10 @@ const CreateShow = () => {
     console.log(seriesData);
     try {
       const bannerFormData = new FormData();
-      bannerFormData.append('image', banner.file);
+      bannerFormData.append('file', banner.file);
 
       const posterFormData = new FormData();
-      posterFormData.append('image', poster.file);
+      posterFormData.append('file', poster.file);
 
       const bannerResponse = await axios.post(process.env.REACT_APP_ASSETS_URL + `/upload/banners`, bannerFormData, {
         headers: {
