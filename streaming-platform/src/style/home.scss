@@ -2,7 +2,7 @@
 
 .Home {
     &-Banner {
-        height: 70vh;
+        height: 55vh;
 
         &::before {
             content: '';
@@ -110,7 +110,7 @@
         height: 500px;
         background: $RubyPlex-DarkBlue;
         &-Title{
-            background-color: $RubyPlex-LightBlue;
+            background: linear-gradient(315deg, rgb(11 11 18 / 44%), rgba(17, 17, 40, 0.8), rgb(0 0 0 / 44%));
             width: 100%;
             display: flex;
             align-items: center;
@@ -271,7 +271,8 @@
 
     &__Img {
         width: 275px;
-        height: 100%;
+        max-height: 180px;
+        aspect-ratio: 3/2;
     }
 
     &:hover {

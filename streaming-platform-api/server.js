@@ -3,7 +3,6 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-// Define your GraphQL schema
 const typeDefs = gql`
   type Show {
     id: ID!
@@ -14,7 +13,7 @@ const typeDefs = gql`
     image: String
     banner: String
     episodes: [Episode!]
-    genres: [Genre!]
+    genres: [GenreShow]
     seasons: [Season!]
   }
 
@@ -25,6 +24,12 @@ const typeDefs = gql`
     number: Int!
     path: String
     image: String
+  }
+
+  type GenreShow {
+    showId: ID!
+    genreId: ID!
+    genre: Genre!
   }
 
   type Genre {
@@ -41,11 +46,9 @@ const typeDefs = gql`
     episodes: [Episode!]!
     showId: Int!
   }
-
-  type Query {
-    shows: [Show!]!
-    show(id: ID!): Show
-    season(id: ID!): [Season!]
+  
+  input GenreInput {
+    id: ID!
   }
   
   input ShowInput {
@@ -53,6 +56,7 @@ const typeDefs = gql`
     description: String!
     image: String
     banner: String
+    genres: [GenreInput!]!
   }
 
   input EpisodeInput {
@@ -71,6 +75,21 @@ const typeDefs = gql`
     episodes: [EpisodeInput!]!
     showId: Int!
   }
+  
+  type SearchResult {
+    results: [Show]
+    total_results: Int
+    total_pages: Int
+  }
+
+  type Query {
+    shows: [Show!]!
+    show(id: ID!): Show
+    genres: [Genre]
+    seasons(id: ID!): [Season!]
+    season(id: ID!): Season!
+    searchShows(query: String!, page: Int!): SearchResult
+  }
 
   type Mutation {
     createShow(input:ShowInput!): Show!
@@ -79,7 +98,6 @@ const typeDefs = gql`
   }
 `;
 
-// Define your resolvers to map the GraphQL schema to the database
 const resolvers = {
   Query: {
     shows: async () => {
@@ -88,12 +106,33 @@ const resolvers = {
       });
     },
     show: async (_, args) => {
+      const data = await prisma.show.findUnique({
+        where: { id: Number(args.id) },
+        include: {
+          genres: {
+            include:{
+              genre:true
+            }
+          },
+        },
+      });
+      console.log(data.genres)
       return prisma.show.findUnique({
         where: { id: Number(args.id) },
-        include: { genres: true },
+        include: {
+          genres: {
+            include:{
+              genre: true
+            }
+          },
+        },
       });
     },
-    season: async (_, args) => {
+    genres: async () => {
+      console.log(await prisma.genre.findMany())
+      return prisma.genre.findMany();
+    },
+    seasons: async (_, args) => {
       console.log('Fetching season with ID:', args.id);
       const seasons = await prisma.season.findMany({
         where: { showId: Number(args.id) },
@@ -102,18 +141,71 @@ const resolvers = {
       console.log('Fetched seasons:', seasons);
       return seasons;
     },
+    season: async (_, args) => {
+      const seasons = await prisma.season.findMany({
+        where: { id: Number(args.id) },
+        include: { episodes: true },
+      });
+      return seasons;
+    },
+    searchShows: async (_, { query, page }) => {
+      const itemsPerPage = 20;
+      const skip = (page - 1) * itemsPerPage;
+
+      try {
+        const results = await prisma.show.findMany({
+          where: {
+            OR: [
+              { name: { contains: query} },
+            ],
+          },
+          include: { seasons: true },
+          skip,
+          take: itemsPerPage,
+        });
+
+        const total_results = await prisma.show.count({
+          where: {
+            OR: [
+              { name: { contains: query} },
+            ],
+          },
+        });
+
+        const total_pages = Math.ceil(total_results / itemsPerPage);
+
+        return {
+          results,
+          total_results,
+          total_pages,
+        };
+      } catch (error) {
+        throw new Error('Error fetching shows: ' + error.message);
+      }
+    },
   },
   Mutation: {
     createShow: async (_, data) => {
+      const { input } = data
       return prisma.show.create({
         data: {
-          name: data.input
+          name: input.name,
+          description: input.description,
+          image: input.image,
+          banner: input.banner,
+          genres: {
+            create: input.genres.map((genre) => ({
+              genre: {
+                connect: { id: Number(genre.id) }
+              }
+            }))
+          }
         }
       });
+      
     },
     createSeason: async (_, data) => {
       const { input } = data
-      console.log(input)
       return prisma.season.create({
         data: {
           name: input.name,
@@ -125,7 +217,7 @@ const resolvers = {
             create: [
               ...input.episodes
             ]
-          }
+          },
         }
       });
     },
@@ -141,13 +233,11 @@ const resolvers = {
   },
 };
 
-// Create an Apollo Server instance
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
-// Start the server
 server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+  console.log(`Server ready at ${url}`);
 });

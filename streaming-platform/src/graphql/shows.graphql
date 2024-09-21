@@ -19,13 +19,16 @@ query GetShowById($id: ID!) {
     banner
     image
     genres {
-      id
-      name
+      genre{
+        id
+        name
+      }
     }
     seasons {
       id
       name
       season_number
+      showId
       episodes {
         id
         name
@@ -35,12 +38,13 @@ query GetShowById($id: ID!) {
 }
 
 query GetSeasonByShow($id: ID!) {
-  season(id: $id) {
+  seasons(id: $id) {
     id
     name
     poster_path
     season_number
     is_set
+    showId
     episodes {
       id
       name
@@ -51,6 +55,48 @@ query GetSeasonByShow($id: ID!) {
     }
   }
 }
+
+query GetSeasonById($id: ID!) {
+  season(id: $id) {
+    id
+    name
+    poster_path
+    season_number
+    is_set
+    showId
+    episodes {
+      id
+      name
+      description
+      number
+      path
+      image
+    }
+  }
+}
+
+query SearchShows($query: String!, $page: Int!) {
+  searchShows(query: $query, page: $page) {
+    results {
+      id
+      name
+      description
+      stars
+      banner
+      image
+    }
+    total_results
+    total_pages
+  }
+}
+
+query GetGenres {
+  genres {
+    id
+    name
+  }
+}
+
 
 mutation CreateShow($input: ShowInput!) {
   createShow(input: $input) {

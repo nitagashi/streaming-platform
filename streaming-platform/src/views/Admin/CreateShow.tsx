@@ -17,9 +17,8 @@ import {
   Step,
   StepLabel,
 } from '@mui/material';
-import { useMutation } from '@apollo/client';
 import { ShowModel } from 'models/Models.types';
-import { useCreateShowMutation, GetShowsDocument } from 'generated/graphql';
+import { useCreateShowMutation, GetShowsDocument, useGetGenresQuery } from 'generated/graphql';
 import InputFileUpload from 'components/Primary-components/FileUploader';
 import axios from 'axios';
 import { Add } from '@mui/icons-material';
@@ -34,20 +33,22 @@ interface FileUploader {
 const CreateShow = () => {
   const [open, setOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [seriesData, setSeriesData] = useState(new ShowModel());
+  //@ts-expect-error a
+  const [seriesData, setSeriesData] = useState<ShowModel>({
+    name: '',
+    description: '',
+    genres: [],
+  });
   const [banner, setBanner] = useState<FileUploader>({ path: '', file: new File([""], "filename"), preview: '' });
   const [poster, setPoster] = useState<FileUploader>({ path: '', file: new File([""], "filename"), preview: '' });
-
-  const [extraFields, setExtraFields] = useState({
-    url: '',
-    name: '',
-    post: '',
-  });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const [createShowMutation, { data, loading, error }] = useCreateShowMutation();
+
+  const { loading: genresLoading, error: genresError, data: genresData } = useGetGenresQuery();
+  const genres = genresData?.genres ?? [];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | { value: unknown; name?: string }>) => {
     const { name, value } = event.target;
@@ -57,16 +58,14 @@ const CreateShow = () => {
     });
   };
 
-  const handleExtraFieldsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setExtraFields({
-      ...extraFields,
-      [name]: value,
+  const handleGenresChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSeriesData({
+      ...seriesData,
+      genres: event.target.value as string[],
     });
   };
 
   const handleSubmit = async (): Promise<void> => {
-    console.log(seriesData);
     try {
       const bannerFormData = new FormData();
       bannerFormData.append('file', banner.file);
@@ -87,18 +86,21 @@ const CreateShow = () => {
 
       const bannerFileName = bannerResponse.data.fileName;
       const posterFileName = posterResponse.data.fileName;
+
+      const genresInput = seriesData.genres.map((genreId) => ({ id: genreId }));
+
       createShowMutation({
         variables: {
           input: {
             name: seriesData.name,
             description: seriesData.description,
-            image: bannerFileName,
-            banner: posterFileName
+            image: posterFileName,
+            banner: bannerFileName,
+            genres: genresInput,
           },
         },
         refetchQueries: [{ query: GetShowsDocument }],
       });
-
 
       handleClose();
     } catch (error) {
@@ -106,14 +108,14 @@ const CreateShow = () => {
     }
   };
 
-  const handleBannerUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBannerUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
     const file = event.target.files[0];
     const preview = URL.createObjectURL(file);
     setBanner({ path: 'banners', file, preview });
   };
 
-  const handlePosterUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePosterUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
     const file = event.target.files[0];
     const preview = URL.createObjectURL(file);
@@ -125,9 +127,11 @@ const CreateShow = () => {
 
   const steps = ['Create Show', 'Additional Info'];
 
+  const genreNameMap = new Map(genres.map((genre) => [genre?.id, genre?.name]));
+
   return (
     <div>
-      <IconButton onClick={handleOpen} aria-label="delete" size="large"  style={{ color: 'white' }}>
+      <IconButton onClick={handleOpen} aria-label="add" size="large" style={{ color: 'white' }}>
         <Add fontSize="inherit" />
       </IconButton>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
@@ -170,18 +174,28 @@ const CreateShow = () => {
                 <Grid item xs={12}>
                   <FormControl fullWidth>
                     <InputLabel id="genres-label">Genres</InputLabel>
+
                     <Select
                       labelId="genres-label"
                       name="genres"
+                      multiple
                       value={seriesData.genres}
-                      //@ts-expect-error a
-                      onChange={handleChange}
+                        //@ts-expect-error a
+                      onChange={handleGenresChange}
+                      renderValue={(selected) => (selected as string[]).map((id) => genreNameMap.get(id)).join(', ')}
                       label="Genres"
                     >
-                      <MenuItem value="1">Drama</MenuItem>
-                      <MenuItem value="2">Comedy</MenuItem>
-                      <MenuItem value="3">Action</MenuItem>
-                      <MenuItem value="4">Romance</MenuItem>
+                      {genresLoading ? (
+                        <MenuItem disabled>Loading...</MenuItem>
+                      ) : genresError ? (
+                        <MenuItem disabled>Error loading genres</MenuItem>
+                      ) : (
+                        genres.map((genre: any) => (
+                          <MenuItem key={genre.id} value={genre.id}>
+                            {genre.name}
+                          </MenuItem>
+                        ))
+                      )}
                     </Select>
                   </FormControl>
                 </Grid>
@@ -191,25 +205,23 @@ const CreateShow = () => {
 
           {activeStep === 1 && (
             <form>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                  <InputFileUpload name="Upload Banner" handleChange={handleBannerUpload} />
-                  {banner.preview && (
-                    <Box mt={2}>
-                      <Typography variant="subtitle2">Banner Preview:</Typography>
-                      <img src={banner.preview} alt="Banner Preview" style={{ width: '100%', maxHeight: '200px' }} />
-                    </Box>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <InputFileUpload name="Upload Poster" handleChange={handlePosterUpload} />
-                  {poster.preview && (
-                    <Box mt={2}>
-                      <Typography variant="subtitle2">Poster Preview:</Typography>
-                      <img src={poster.preview} alt="Poster Preview" style={{ width: '100%', maxHeight: '200px' }} />
-                    </Box>
-                  )}
-                </Grid>
+              <Grid item xs={12} sm={6}>
+                <InputFileUpload name="Upload Banner" handleChange={handleBannerUpload} />
+                {banner.preview && (
+                  <Box mt={2}>
+                    <Typography variant="subtitle2">Banner Preview:</Typography>
+                    <img src={banner.preview} alt="Banner Preview" style={{ width: 'auto', maxHeight: '230px' }} />
+                  </Box>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <InputFileUpload name="Upload Poster" handleChange={handlePosterUpload} />
+                {poster.preview && (
+                  <Box mt={2}>
+                    <Typography variant="subtitle2">Poster Preview:</Typography>
+                    <img src={poster.preview} alt="Poster Preview" style={{ width: 'auto', maxHeight: '340px' }} />
+                  </Box>
+                )}
               </Grid>
             </form>
           )}

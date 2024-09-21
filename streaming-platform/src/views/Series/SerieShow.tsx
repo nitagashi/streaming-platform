@@ -1,14 +1,12 @@
-import { Chip, Skeleton } from '@mui/material';
+import { Chip, Rating, Skeleton } from '@mui/material';
 import CircularProgress from 'components/Pixi/CircularProgress';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import SeriesService from 'services/SeriesServices';
 import EpisodeCard from './EpisodeCard';
 import StarsRating from 'components/Pixi/StarsRating';
 import SkeletonLoader from 'components/Loader/SkeletonLoader';
-import { EpisodeModel, ShowInfo, ShowModel } from 'models/Models.types';
-import { useQuery } from '@apollo/client';
-import { Episode, type Season, useGetSeasonByShowQuery, useGetSeasonByShowSuspenseQuery, useGetShowByIdQuery } from 'generated/graphql';
+import { ShowModel } from 'models/Models.types';
+import { Episode, type Season, useGetSeasonByShowQuery, useGetShowByIdQuery } from 'generated/graphql';
 import CreateSeason from 'views/Admin/CreateSeason';
 
 interface Show {
@@ -20,9 +18,10 @@ function SerieShow() {
     // const [season, setSeason] = useState<Season>(new Season());
     const [currentSeason, setCurrentSeason] = useState<number>(1);
     const [selectedSeason, setSelectedSeason] = useState<Season>();
+    const [value, setValue] = React.useState<number | null>(2);
     const params = useParams();
     const navigate = useNavigate();
-    const { id = '0' } = params;
+    const { id = '0', seasonParam } = params;
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [])
@@ -39,31 +38,41 @@ function SerieShow() {
         },
     });
 
+    const seasons = seasonData?.seasons;
+
+
+    useEffect(() => {
+        if (seasons && !selectedSeason && !seasonParam) {
+            setCurrentSeason(seasons[0]?.season_number)
+            setSelectedSeason(seasons[0]);
+            return
+        }
+    }, [seasons, selectedSeason, seasonParam]);
+
     const show = showData?.show;
-    const seasons = seasonData?.season;
 
     if (loadingShow || loadingSeason) return <p>Loading...</p>;
+    if (errorShow || errorSeason) return <p>Loading...</p>;
     console.log(errorShow)
     console.log(errorSeason)
 
-    if (!show || !seasons) return <p>No show available</p>;
+    if (!show) return <p>No show available</p>;
 
-    if (!selectedSeason) setSelectedSeason(seasons[0])
-    if (!selectedSeason) return <p>No show available</p>;
+    // if (!selectedSeason) return <p>No show available</p>;
     const getPercentage = () => {
         return Math.round(Math.floor(Math.random() * 100))
     }
-    const handleStarChange = (value: number) => {
+    const handleStarChange = (event: React.SyntheticEvent<Element, Event>, value: number | null) => {
         console.log(value);
     }
     return (
         <div className="Show">
             <div className='Show-Description'>
-                <img className="Show-Banner" src={`${process.env.REACT_APP_ASSETS_URL}/${show.banner}`}></img>
+                <img alt='noImage' className="Show-Banner" src={`${process.env.REACT_APP_ASSETS_URL}/${show.banner}`}></img>
                 <div className="Show-ImageContainer">
                     {
                         seasons ?
-                            <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_ASSETS_URL}/${show.image}`} alt="Show Backdrop" />
+                            <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_ASSETS_URL}/${selectedSeason?.poster_path}`} alt="Show Backdrop" />
                             :
                             <Skeleton className="Show-ImageContainer__Img" variant="rectangular" width={240} height={360} />
                     }
@@ -76,12 +85,12 @@ function SerieShow() {
                         <div className="Show-Description-Section-Titles">
                             <p className="Show-Description-Section-Titles__Title">{show.name}</p>
                             <p className="Show-Description-Section-Titles__Title"> - </p>
-                            <p className="Show-Description-Section-Titles__Title">{selectedSeason.name}</p>
+                            <p className="Show-Description-Section-Titles__Title">{selectedSeason?.name}</p>
                         </div>
                         <div className="Show-Description-Section__Genres">
                             {
                                 show.genres != null ? show.genres.map((genre) => {
-                                    return <Chip label={genre.name} size="small"></Chip>
+                                    return <Chip label={genre?.genre.name} size="small"></Chip>
                                 })
                                     : ''
                             }
@@ -101,7 +110,10 @@ function SerieShow() {
                     {seasons != null ? seasons.map((season) => {
                         return (
                             <div className="Show-Season-BtnContainer">
-                                <button onClick={() => { setCurrentSeason(season.season_number), setSelectedSeason(season) }} className={currentSeason === season.season_number ? "Show-Season__Btn-Active" : "Show-Season__Btn"}>Season {season.season_number}</button>
+                                <button onClick={() => {
+                                    setCurrentSeason(season.season_number)
+                                    setSelectedSeason(season)
+                                }} className={selectedSeason?.id === season.id ? "Show-Season__Btn-Active" : "Show-Season__Btn"}>Season {season.season_number}</button>
                             </div>
                         )
                     }) : ''}
@@ -112,11 +124,11 @@ function SerieShow() {
                         selectedSeason ? (
                             selectedSeason.episodes != null ? selectedSeason.episodes.map((episode: Episode) => {
                                 return (
-                                    <div onClick={() => navigate(`/SerieVideo/${id}/${selectedSeason.season_number}/${episode.number}`)}>
+                                    <div onClick={() => navigate(`/SerieVideo/${id}/${selectedSeason.id}/${episode.number}`)}>
                                         <EpisodeCard episode={episode} />
                                     </div>)
 
-                            }) : null)
+                            }) : <p>No season found</p>)
                             : (
                                 <SkeletonLoader number={20} width={275} height={200} />
                             )

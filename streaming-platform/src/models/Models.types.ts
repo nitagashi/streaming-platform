@@ -36,7 +36,7 @@ export class ShowModel {
         public banner: string = '',
         public episodes: Array<EpisodeModel> = [],
         public showId: number = 0,
-        public genres: Genres[] = [],
+        public genres: string[] = [],
         public seasons: Season[] = []
     ) { }
 

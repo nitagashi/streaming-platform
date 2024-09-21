@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -13,14 +13,20 @@ import {
   Step,
   StepLabel,
   IconButton,
-} from '@mui/material';
-import { useCreateSeasonMutation, GetSeasonByShowDocument } from 'generated/graphql';
-import InputFileUpload from 'components/Primary-components/FileUploader';
-import axios from 'axios';
-import { Add, Delete } from '@mui/icons-material';
+  styled,
+  Snackbar,
+  SnackbarCloseReason,
+} from "@mui/material";
+import {
+  useCreateSeasonMutation,
+  GetSeasonByShowDocument,
+} from "generated/graphql";
+import InputFileUpload from "components/Primary-components/FileUploader";
+import axios from "axios";
+import { Add, Delete } from "@mui/icons-material";
 
-interface P{
-    showId: number
+interface P {
+  showId: number;
 }
 
 interface FileUploader {
@@ -30,47 +36,83 @@ interface FileUploader {
 }
 
 interface Season {
-  episodes: Array<Episode>,
-  is_set: boolean,
-  name: string,
-  poster_path: string,
-  season_number: number,
-  showId: number
+  episodes: Array<Episode>;
+  is_set: boolean;
+  name: string;
+  poster_path: string;
+  season_number: number;
+  showId: number;
 }
 
 interface Episode {
-  description: string,
-  name: string,
-  number: number,
-  image?: File,
-  path?: File
+  description: string;
+  name: string;
+  number: number;
+  image?: File;
+  path?: File;
 }
 
-const CreateSeason = (props : P) => {
+const CustomDialog = styled(Dialog)(({ theme }: any) => ({
+  "& .MuiStepLabel-label": {
+    "&.Mui-active": {
+      color: "#f5f5f7",
+      background: "linear-gradient(135deg, #650000ba, #8b0000a1, #1e1e2b91, #11111491)",
+      Opacity: "0.8",
+      padding: "5px",
+      borderRadius: "12px",
+    },
+    color: "#f5f5f7",
+  },
+  "& .MuiInputBase-root": {
+    color: "#f5f5f7",
+  },
+
+  "& .MuiDialogTitle-root": {
+    color: "#f5f5f7",
+    backgroundColor: "#16161e",
+  },
+}));
+
+const CreateSeason = (props: P) => {
   const [open, setOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+  const [isAddingEpisode, setIsAddingEpisode] = useState(false);
   const [seasonData, setSeasonData] = useState<Season>({
-    name: '',
+    name: "",
     season_number: 1,
     is_set: false,
     showId: props.showId,
-    poster_path: '',
+    poster_path: "",
     episodes: [],
   });
-  const [poster, setPoster] = useState<FileUploader>({ path: '', file: undefined, preview: '' });
+  const [poster, setPoster] = useState<FileUploader>({
+    path: "",
+    file: undefined,
+    preview: "",
+  });
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [episode, setEpisode] = useState<Episode>({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     number: 1
   });
-  const [episodePoster, setEpisodePoster] = useState<FileUploader>({ path: '', file: undefined, preview: '' });
-  const [episodeVideo, setEpisodeVideo] = useState<FileUploader>({ path: '', file: undefined, preview: '' });
+  const [episodePoster, setEpisodePoster] = useState<FileUploader>({
+    path: "",
+    file: undefined,
+    preview: "",
+  });
+  const [episodeVideo, setEpisodeVideo] = useState<FileUploader>({
+    path: "",
+    file: undefined,
+    preview: "",
+  });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [createSeasonMutation, { data, loading, error }] = useCreateSeasonMutation();
+  const [createSeasonMutation, { data, loading, error }] =
+    useCreateSeasonMutation();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -89,64 +131,114 @@ const CreateSeason = (props : P) => {
   };
 
   const handleAddEpisode = () => {
-    setEpisodes([...episodes, { ...episode, image: episodePoster.file, path: episodeVideo.file }]);
+    setIsAddingEpisode(false);
+    setEpisodes([
+      ...episodes,
+      {
+        ...episode,
+        number: episodes.length + 1,
+        image: episodePoster.file,
+        path: episodeVideo.file,
+      },
+    ]);
     setEpisode({
-      name: '',
-      description: '',
+      name: "",
+      description: "",
+      number: episodes.length + 2,
+      path: undefined,
+      image: undefined,
+    });
+    setEpisodePoster({
+      path: "",
+      file: new File([""], "filename"),
+      preview: "",
+    });
+    setEpisodeVideo({
+      path: "",
+      file: new File([""], "filename"),
+      preview: "",
+    });
+  };
+
+  const handleDiscardChanges = () => {
+    setEpisode({
+      name: "",
+      description: "",
       number: episode.number + 1,
       path: undefined,
       image: undefined,
     });
-    setEpisodePoster({ path: '', file: new File([''], 'filename'), preview: '' });
-    setEpisodeVideo({ path: '', file: new File([''], 'filename'), preview: '' });
-  };
+    setIsAddingEpisode(false);
+  }
 
   const handleRemoveEpisode = (index: number) => {
-    const updatedEpisodes = episodes.filter((_, i) => i !== index);
+    const updatedEpisodes = episodes
+      .filter((_, i) => i !== index)
+      .map((ep, i) => ({
+        ...ep,
+        number: i + 1,
+      }));
     setEpisodes(updatedEpisodes);
   };
+  
 
   const handleSubmit = async (): Promise<void> => {
+    if(isAddingEpisode) {
+      setOpenSnackbar(true)
+      return
+    }
     try {
       const updatedEpisodes = await Promise.all(
         episodes.map(async (ep) => {
-          if(ep.image && ep.path){
+          if (ep.image && ep.path) {
             const posterFormData = new FormData();
-            posterFormData.append('file', ep.image);
-              console.log(ep.image)
-              const videoFormData = new FormData();
-              videoFormData.append('file', ep.path);
-              
-              const [posterResponse, videoResponse] = await Promise.all([
-                axios.post(`${process.env.REACT_APP_ASSETS_URL}/upload/posters`, posterFormData, {
-                  headers: { 'Content-Type': 'multipart/form-data' },
-                }),
-                axios.post(`${process.env.REACT_APP_ASSETS_URL}/upload/episodeVideos`, videoFormData, {
-                  headers: { 'Content-Type': 'multipart/form-data' },
-                }),
-              ]);
-              return {
-                ...ep,
-                image: posterResponse.data.fileName,
-                path: videoResponse.data.fileName,
-              };
+            posterFormData.append("file", ep.image);
+            console.log(ep.image);
+            const videoFormData = new FormData();
+            videoFormData.append("file", ep.path);
+
+            const [posterResponse, videoResponse] = await Promise.all([
+              axios.post(
+                `${process.env.REACT_APP_ASSETS_URL}/upload/posters`,
+                posterFormData,
+                {
+                  headers: { "Content-Type": "multipart/form-data" },
+                }
+              ),
+              axios.post(
+                `${process.env.REACT_APP_ASSETS_URL}/upload/episodeVideos`,
+                videoFormData,
+                {
+                  headers: { "Content-Type": "multipart/form-data" },
+                }
+              ),
+            ]);
+            return {
+              ...ep,
+              image: posterResponse.data.fileName,
+              path: videoResponse.data.fileName,
+            };
           }
-          return ep
+          return ep;
         })
       );
-      let posterFileName = ''
-      if(poster.file){
+      let posterFileName = "";
+      if (poster.file) {
         const posterFormData = new FormData();
-        posterFormData.append('file', poster.file);
-  
-        const posterResponse = await axios.post(process.env.REACT_APP_ASSETS_URL + `/upload/posters`, posterFormData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        posterFormData.append("file", poster.file);
+
+        const posterResponse = await axios.post(
+          process.env.REACT_APP_ASSETS_URL + `/upload/posters`,
+          posterFormData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         posterFileName = posterResponse.data.fileName;
       }
-      console.log(seasonData)
+      console.log(seasonData);
       const seasonInput = {
         ...seasonData,
         showId: props.showId,
@@ -160,57 +252,96 @@ const CreateSeason = (props : P) => {
           image: ep.image,
         })),
       };
-      console.log(seasonInput)
+      console.log(seasonInput);
       await createSeasonMutation({
         variables: {
           input: seasonInput,
         },
-        refetchQueries: [{ query: GetSeasonByShowDocument, variables: { id: seasonInput.showId },  }],
+        refetchQueries: [
+          {
+            query: GetSeasonByShowDocument,
+            variables: { id: seasonInput.showId },
+          },
+        ],
       });
-
-
 
       handleClose();
     } catch (error) {
-      console.error('Error creating season:', error);
+      console.error("Error creating season:", error);
     }
   };
 
-  const handlePosterUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePosterUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (!event.target.files) return;
     const file = event.target.files[0];
-    const preview = URL.createObjectURL(file);
-    setPoster({ path: 'posters', file, preview });
+    if(file){
+      const preview = URL.createObjectURL(file);
+      setPoster({ path: "posters", file, preview });
+    }
   };
 
-  const handleEpisodePosterUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEpisodePosterUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (!event.target.files) return;
     const file = event.target.files[0];
     const preview = URL.createObjectURL(file);
-    setEpisodePoster({ path: 'episode_posters', file, preview });
+    setEpisodePoster({ path: "episode_posters", file, preview });
   };
 
-  const handleEpisodeVideoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEpisodeVideoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (!event.target.files) return;
     const file = event.target.files[0];
     const preview = URL.createObjectURL(file);
-    setEpisodeVideo({ path: 'episode_videos', file, preview });
+    setEpisodeVideo({ path: "episode_videos", file, preview });
   };
 
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
   const handleBack = () => setActiveStep((prevStep) => prevStep - 1);
 
-  const steps = ['Create Season', 'Add Episodes'];
+  const steps = ["Create Season", "Add Episodes"];
+  const handleCloseSnackBar = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
 
   return (
-    <div className='AddBtn'>
-      <IconButton onClick={handleOpen} aria-label="add season" size="large" style={{ color: 'white' }}>
+    <div className="CreateSeason">
+      <IconButton
+        onClick={handleOpen}
+        aria-label="add season"
+        size="large"
+        style={{ color: "white" }}
+      >
         <Add fontSize="inherit" />
       </IconButton>
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <CustomDialog
+        open={open}
+        onClose={handleClose}
+        className="CreateSeason-Modal"
+        fullWidth
+        maxWidth="sm"
+      >
+        <Snackbar
+          open={openSnackbar}
+          onClose={handleCloseSnackBar}
+          autoHideDuration={5000}
+          color="warning"
+          message="You are still adding an episode! Click the button to add or discard it!"
+        />
         <DialogTitle>Create Season</DialogTitle>
-        <DialogContent>
-          <Stepper activeStep={activeStep} style={{ marginBottom: '20px' }}>
+        <DialogContent dividers>
+          <Stepper activeStep={activeStep} style={{ marginBottom: "20px" }}>
             {steps.map((label, index) => (
               <Step key={index}>
                 <StepLabel>{label}</StepLabel>
@@ -244,11 +375,20 @@ const CreateSeason = (props : P) => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <InputFileUpload name="Upload Poster" handleChange={handlePosterUpload} />
+                  <InputFileUpload
+                    name="Upload Poster"
+                    handleChange={handlePosterUpload}
+                  />
                   {poster.preview && (
                     <Box mt={2}>
-                      <Typography variant="subtitle2">Poster Preview:</Typography>
-                      <img src={poster.preview} alt="Poster Preview" style={{ width: '100%', maxHeight: '200px' }} />
+                      <Typography variant="subtitle2">
+                        Poster Preview:
+                      </Typography>
+                      <img
+                        src={poster.preview}
+                        alt="Poster Preview"
+                        style={{ width: "240px", height: "360px" }}
+                      />
                     </Box>
                   )}
                 </Grid>
@@ -283,49 +423,68 @@ const CreateSeason = (props : P) => {
                     onChange={handleEpisodeChange}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <InputFileUpload name="Upload Episode Poster" handleChange={handleEpisodePosterUpload} />
-                  {episodePoster.preview && (
-                    <Box mt={2}>
-                      <Typography variant="subtitle2">Episode Poster Preview:</Typography>
-                      <img src={episodePoster.preview} alt="Episode Poster Preview" style={{ width: '100%', maxHeight: '200px' }} />
-                    </Box>
-                  )}
-                </Grid>
-                <Grid item xs={12}>
-                  <InputFileUpload name="Upload Episode Video" handleChange={handleEpisodeVideoUpload} />
-                  {episodeVideo.preview && (
-                    <Box mt={2}>
-                      <Typography variant="subtitle2">Video Preview:</Typography>
-                      <video width="100%" controls>
-                        <source src={episodeVideo.preview} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </Box>
-                  )}
-                </Grid>
-                <Grid item xs={12}>
-                  <Button variant="contained" onClick={handleAddEpisode}>
+                  <div className="CreateSeason-Modal-UploadButtons">
+                    <div>
+                      <InputFileUpload
+                        name="Upload Episode Poster"
+                        handleChange={handleEpisodePosterUpload}
+                      />
+                      {episodePoster.preview && (
+                        <Box mt={2}>
+                          <Typography variant="subtitle2">Episode Poster Preview:</Typography>
+                          <img
+                            src={episodePoster.preview}
+                            alt="Episode Poster Preview"
+                            style={{ width: "275px", maxHeight: "180px" }}
+                          />
+                        </Box>
+                      )}
+                    </div>
+                    <div>
+                      <InputFileUpload
+                        name="Upload Episode Video"
+                        handleChange={handleEpisodeVideoUpload}
+                      />
+                      {episodeVideo.preview && (
+                        <Box mt={2}>
+                          <Typography variant="subtitle2">Video Preview:</Typography>
+                          <video width="100%" controls>
+                            <source src={episodeVideo.preview} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        </Box>
+                      )}
+                    </div>
+                  </div>
+                <Grid item xs={12} container justifyContent="flex-end">
+                  <Button
+                    variant="contained"
+                    startIcon={<Add />}
+                    onClick={handleAddEpisode}
+                  >
                     Add Episode
                   </Button>
+              </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6">Episodes:</Typography>
+                  <Box style={{ maxHeight: "150px", overflowY: "auto" }}>
+                    <ul style={{ padding: 0, listStyle: 'none' }}>
+                      {episodes.length > 0 ? episodes.map((ep, index) => (
+                        <li key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span>{ep.number}. {ep.name}</span>
+                          <IconButton
+                            onClick={() => handleRemoveEpisode(index)}
+                            aria-label="delete episode"
+                          >
+                            <Delete color="secondary" />
+                          </IconButton>
+                        </li>
+                      )):
+                      <div>The list is empty!</div>
+                      }
+                    </ul>
+                  </Box>
                 </Grid>
-                {episodes.length > 0 && (
-                  <Grid item xs={12}>
-                    <Typography variant="h6">Episodes:</Typography>
-                    <Box style={{ maxHeight: '150px', overflowY: 'auto' }}>
-                      <ul>
-                        {episodes.map((ep, index) => (
-                          <li key={index}>
-                            {ep.number}. {ep.name}{' '}
-                            <IconButton onClick={() => handleRemoveEpisode(index)} aria-label="delete episode">
-                              <Delete />
-                            </IconButton>
-                          </li>
-                        ))}
-                      </ul>
-                    </Box>
-                  </Grid>
-                )}
               </Grid>
             </form>
           )}
@@ -346,7 +505,7 @@ const CreateSeason = (props : P) => {
             </Button>
           )}
         </DialogActions>
-      </Dialog>
+      </CustomDialog>
     </div>
   );
 };
