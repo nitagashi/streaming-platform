@@ -1,4 +1,4 @@
-import { Chip, Rating, Skeleton } from '@mui/material';
+import { Chip, Rating, Skeleton, Typography } from '@mui/material';
 import CircularProgress from 'components/Pixi/CircularProgress';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
@@ -72,7 +72,7 @@ function SerieShow() {
                 <div className="Show-ImageContainer">
                     {
                         seasons ?
-                            <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_ASSETS_URL}/${selectedSeason?.poster_path}`} alt="Show Backdrop" />
+                            <img className="Show-ImageContainer__Img" src={`${process.env.REACT_APP_ASSETS_URL}/${selectedSeason?.poster_path ?? show.image}`} alt="Show Backdrop" />
                             :
                             <Skeleton className="Show-ImageContainer__Img" variant="rectangular" width={240} height={360} />
                     }
@@ -130,7 +130,7 @@ function SerieShow() {
 
                             }) : <p>No season found</p>)
                             : (
-                                <SkeletonLoader number={20} width={275} height={200} />
+                                <Typography color='secondary'>No season found</Typography>
                             )
                     }
                 </div>
